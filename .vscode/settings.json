@@ -1,0 +1,30 @@
+{
+    "files.associations": {
+        "resources.h": "c",
+        "genesis.h": "c",
+        "font.h": "c",
+        "type_traits": "c",
+        "memory.h": "c",
+        "title.h": "c",
+        "__config": "c",
+        "palettes.h": "c",
+        "types.h": "c",
+        "config.h": "c",
+        "vdp.h": "c",
+        "genesisutils.h": "c",
+        "stb_sprintf.h": "c",
+        "cosmicforcegenesis.h": "c",
+        "cstdio": "c",
+        "ctime": "c",
+        "cwchar": "c",
+        "locale": "c",
+        "string": "c",
+        "iterator": "c",
+        "test_resources.h": "c",
+        "data.h": "c"
+    },
+
+    "editor.minimap.enabled": true,
+    "editor.minimap.maxColumn": 40,
+    "C_Cpp.errorSquiggles": "Disabled"
+}
