@@ -85,6 +85,11 @@ void resetTileIndex()
     g_tileIndex = TILE_USERINDEX;
 }
 
+u16 getTileIndex()
+{
+    return g_tileIndex;
+}
+
 u16 loadTileData(TileSet* tileSet)
 {
     const u16 startIndex = g_tileIndex;
@@ -108,7 +113,6 @@ u16 loadTileData(TileSet* tileSet)
 #define TITLE_SPRITE_LIST_ADDR   0xFC00
 
 #define TILE_STARTINDEX          TILE_USERINDEX
-// #define TILE_STARTINDEX          (0x1000/32)
 
 void scene1()
 {
@@ -123,12 +127,12 @@ void scene1()
 
     VDP_PRINT_1(1, 4, "BG sum: %0X", sum);
 
-    //VDP_PRINT_1(1, 6, "sprite_Planet_M.maxNumTile %0X", sprite_Planet_M.maxNumTile*32);
+    VDP_PRINT_1(1, 6, "sprite_Planet_Sprites.maxNumTile %0X", sprite_Planet_Sprites.maxNumTile*32);
 
-    //VDP_PRINT_1(1, 8, "image_Overlay.tileset->numTile %0X", image_Overlay.tileset->numTile*32);
+    VDP_PRINT_1(1, 8, "image_Planet_Overlay.tileset->numTile %0X", image_Planet_Overlay.tileset->numTile*32);
 
-    //sum += sprite_Planet_M.maxNumTile*32;
-    //sum += image_Overlay.tileset->numTile*32;
+    sum += sprite_Planet_Sprites.maxNumTile*32;
+    sum += image_Planet_Overlay.tileset->numTile*32;
 
     VDP_PRINT_1(1, 10, "Total sum: %0X", sum);
 
@@ -136,75 +140,40 @@ void scene1()
 #endif
 
     resetScreen();
-#if 0
-    u16 ind = TILE_USERINDEX;
-    VDP_drawImageEx(
-        VDP_PLAN_B,
-        &image_Planet_Layer0_0,
-        TILE_ATTR_FULL(PAL0, FALSE, FALSE, FALSE, ind),
-        0, 0,
-        TRUE,
-        DMA
-    );
-    ind += image_Planet_Layer0_0.tileset->numTile;
-
-    VDP_drawImageEx(
-        VDP_PLAN_B,
-        &image_Planet_Layer0_1,
-        TILE_ATTR_FULL(PAL1, FALSE, FALSE, FALSE, ind),
-        128/8, 0,
-        TRUE,
-        DMA
-    );
-    ind += image_Planet_Layer0_1.tileset->numTile;
-
-    VDP_drawImageEx(
-        VDP_PLAN_B,
-        &image_Planet_Layer0_2,
-        TILE_ATTR_FULL(PAL2, FALSE, FALSE, FALSE, ind),
-        128/8+96/8, 0,
-        TRUE,
-        DMA
-    );
-    ind += image_Planet_Layer0_2.tileset->numTile;
-
-    WAIT_FOREVER;
-#endif
-
     resetTileIndex();
 
     const u16 indexPlanet_L = loadTileData(image_Planet_Layer0_0.tileset);
     const u16 indexPlanet_M = loadTileData(image_Planet_Layer0_1.tileset);
     const u16 indexPlanet_R = loadTileData(image_Planet_Layer0_2.tileset);
 
-    //const u16 indexPlanetOverlay = index;
+    const u16 indexPlanetOverlay = loadTileData(image_Planet_Overlay.tileset);
     //VDP_loadTileData(image_Overlay.tileset->tiles, index, image_Overlay.tileset->numTile, DMA);
     //index += image_Overlay.tileset->numTile;
 
-#if 0
+#if 1
     SPR_reset();
 
     u16 numTile;
-    Sprite* planet = SPR_addSprite(&sprite_Planet_M, 0, 0, TILE_ATTR(PAL3, FALSE, FALSE, FALSE));
+    Sprite* planet = SPR_addSprite(&sprite_Planet_Sprites, 0, 0, TILE_ATTR(PAL3, FALSE, FALSE, FALSE));
 
     SPR_setAutoTileUpload(planet, FALSE);
-    SPR_loadAllFrames(&sprite_Planet_M, index, &numTile);
-    SPR_setVRAMTileIndex(planet, index);
+    SPR_loadAllFrames(&sprite_Planet_Sprites, getTileIndex(), &numTile);
+    SPR_setVRAMTileIndex(planet, getTileIndex());
     SPR_setFrame(planet, 0);
     SPR_setVisibility(planet, HIDDEN);
-    SPR_setPosition(planet, 120+320, 72);
+    // SPR_setPosition(planet, 120+320, 72);
     SPR_update();
 #endif
 
     VDP_setPaletteColors( 0, image_Planet_Layer0_0.palette->data, 16);
     VDP_setPaletteColors(16, image_Planet_Layer0_1.palette->data, 16);
     VDP_setPaletteColors(32, image_Planet_Layer0_2.palette->data, 16);
-    // VDP_setPaletteColors(48, palette_Planet_M.data,        16);
+    VDP_setPaletteColors(48, palette_Planet_Sprites.data,         16);
 
     for (s16 hScroll=0; hScroll<=320; hScroll+=8)
     {
-        //SPR_setPosition(planet, 320+120-hScroll-8, 72);
-        //SPR_setVisibility(planet, !((320+120-hScroll-8)<320));
+        SPR_setPosition(planet, 320+120-hScroll-8, 72);
+        SPR_setVisibility(planet, !((320+120-hScroll-8)<320));
 
         SYS_doVBlankProcess();
 
@@ -235,14 +204,12 @@ void scene1()
         }
     }
 
-    WAIT_FOREVER;
-
     waitMs(250);
 
-    //const u16 yOverlayOffset = IS_PALSYSTEM ? 2 : 0;
-    //VDP_waitVSync();
-    //VDP_setHorizontalScroll(BG_A, 4);
-    //VDP_setMapEx(BG_A, image_Overlay.tilemap, TILE_ATTR_FULL(PAL1, TRUE, FALSE, FALSE, indexPlanetOverlay), 2, 18+yOverlayOffset, 0, 0, 35, 9);
+    const u16 yOverlayOffset = IS_PALSYSTEM ? 2 : 0;
+    VDP_waitVSync();
+    VDP_setHorizontalScroll(BG_A, 4);
+    VDP_setMapEx(BG_A, image_Planet_Overlay.tilemap, TILE_ATTR_FULL(PAL1, TRUE, FALSE, FALSE, indexPlanetOverlay), 7, 18+yOverlayOffset, 0, 0, 26, 9);
 
     waitMs(2000);
 
@@ -255,57 +222,65 @@ void scene1()
 
 void scene2()
 {
-    u16 index = TILE_USERINDEX;
+    resetScreen();
+    resetTileIndex();
 
-    const u16 indexScene2 = index;
-    VDP_loadTileData(image_Scene2_0.tileset->tiles, index, image_Scene2_0.tileset->numTile, DMA);
-    index += image_Scene2_0.tileset->numTile;
+    const u16 indexScene2 = loadTileData(image_Explosion_Background.tileset);
+    const u16 indexExplosionOverlay = loadTileData(image_Explosion_Overlay.tileset);
+ 
+    //const u16 indexScene2 = index;
+    //VDP_loadTileData(image_Scene2_0.tileset->tiles, index, image_Scene2_0.tileset->numTile, DMA);
+    //index += image_Scene2_0.tileset->numTile;
 
-    const u16 indexScene2Overlay = index;
-    VDP_loadTileData(image_Scene2_Overlay.tileset->tiles, index, image_Scene2_Overlay.tileset->numTile, DMA);
-    index += image_Scene2_Overlay.tileset->numTile;
+    //const u16 indexScene2Overlay = index;
+    //VDP_loadTileData(image_Scene2_Overlay.tileset->tiles, index, image_Scene2_Overlay.tileset->numTile, DMA);
+    //index += image_Scene2_Overlay.tileset->numTile;
 
     VDP_setMapEx(
         BG_B,
-        image_Scene2_0.tilemap,
+        image_Explosion_Background.tilemap,
         TILE_ATTR_FULL(PAL0, FALSE, FALSE, FALSE, indexScene2),
-        0, 0, 0, 0, image_Scene2_0.tilemap->w, image_Scene2_0.tilemap->h
+        0, 0, 0, 0, image_Explosion_Background.tilemap->w, image_Explosion_Background.tilemap->h
     );
 
-    const s16 yBackgroundOffset = IS_PALSYSTEM ? 0 : 16;
-    VDP_setVerticalScroll(BG_B, yBackgroundOffset);
+    //const s16 yBackgroundOffset = IS_PALSYSTEM ? 0 : 16;
+    //VDP_setVerticalScroll(BG_B, yBackgroundOffset);
 
     SPR_reset();
 
     const u16 attribute = TILE_ATTR(PAL1, FALSE, FALSE, FALSE);
 
     const s16 ySpriteOffset = IS_PALSYSTEM ? 0: -16;
-    drawSprite(&sprite_Scene2_0, 192, 104+ySpriteOffset, attribute, &index);
-    drawSprite(&sprite_Scene2_1,  72, 104+ySpriteOffset, attribute, &index);
-    drawSprite(&sprite_Scene2_2,  24, 126+ySpriteOffset, attribute, &index);
+    drawSprite(&sprite_Explosion_Sprites_0, 96,     120+ySpriteOffset, attribute, &g_tileIndex);
+    drawSprite(&sprite_Explosion_Sprites_1, 96+128, 120+ySpriteOffset, attribute, &g_tileIndex);
 
     SPR_update();
 
+
     u16 palTemp[64];
-    memcpy(palTemp+ 0, palette_Scene2_0.data, 16*2);
-    memcpy(palTemp+16, palette_Scene2_1.data, 16*2);
-    memcpy(palTemp+32, palette_Scene2_2.data, 16*2);
+    memcpy(palTemp+ 0, image_Explosion_Background.palette->data, 16*2);
+    memcpy(palTemp+16, sprite_Explosion_Sprites_0.palette->data, 16*2);
+    memcpy(palTemp+32, image_Explosion_Overlay.palette->data, 16*3);
 
-    PAL_fadeToAll(palTemp, 32, FALSE);
+    PAL_fadeToAll(palTemp, 48, FALSE);
 
+#if 1
     waitMs(0250);
 
-    const u16 yOverlayOffset = IS_PALSYSTEM ? 2 : 0;
+    const u16 yOverlayOffset = 0; //IS_PALSYSTEM ? 2 : 0;
     VDP_waitVSync();
-    VDP_setMapEx(BG_A, image_Scene2_Overlay.tilemap, TILE_ATTR_FULL(PAL2, TRUE, FALSE, FALSE, indexScene2Overlay), 4, 20+yOverlayOffset, 0, 0, 32, 7);
+    VDP_setMapEx(BG_A, image_Explosion_Overlay.tilemap, TILE_ATTR_FULL(PAL2, TRUE, FALSE, FALSE, indexExplosionOverlay), 8, 20+yOverlayOffset, 0, 0, 24, 7);
 
     waitMs(2000);
+
+    WAIT_FOREVER;
 
     PAL_fadeToAll(palette_black, 32, FALSE);
 
     waitMs(500);
 
     resetScreen();
+#endif
 }
 
 void scene3()
@@ -467,7 +442,7 @@ int main()
 
     XGM_startPlay(xgm_01);
 
-    scene1();    
-    //scene2();
+    //scene1();    
+    scene2();
     //scene3();
 }
