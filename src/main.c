@@ -228,14 +228,6 @@ void scene2()
     const u16 indexScene2 = loadTileData(image_Explosion_Background.tileset);
     const u16 indexExplosionOverlay = loadTileData(image_Explosion_Overlay.tileset);
  
-    //const u16 indexScene2 = index;
-    //VDP_loadTileData(image_Scene2_0.tileset->tiles, index, image_Scene2_0.tileset->numTile, DMA);
-    //index += image_Scene2_0.tileset->numTile;
-
-    //const u16 indexScene2Overlay = index;
-    //VDP_loadTileData(image_Scene2_Overlay.tileset->tiles, index, image_Scene2_Overlay.tileset->numTile, DMA);
-    //index += image_Scene2_Overlay.tileset->numTile;
-
     VDP_setMapEx(
         BG_B,
         image_Explosion_Background.tilemap,
@@ -243,19 +235,18 @@ void scene2()
         0, 0, 0, 0, image_Explosion_Background.tilemap->w, image_Explosion_Background.tilemap->h
     );
 
-    //const s16 yBackgroundOffset = IS_PALSYSTEM ? 0 : 16;
-    //VDP_setVerticalScroll(BG_B, yBackgroundOffset);
+    const s16 yBackgroundOffset = IS_PALSYSTEM ? 0 : 16;
+    VDP_setVerticalScroll(BG_B, yBackgroundOffset);
 
     SPR_reset();
 
     const u16 attribute = TILE_ATTR(PAL1, FALSE, FALSE, FALSE);
 
     const s16 ySpriteOffset = IS_PALSYSTEM ? 0: -16;
-    drawSprite(&sprite_Explosion_Sprites_0, 96,     120+ySpriteOffset, attribute, &g_tileIndex);
-    drawSprite(&sprite_Explosion_Sprites_1, 96+128, 120+ySpriteOffset, attribute, &g_tileIndex);
+    drawSprite(&sprite_Explosion_Sprites_0, 96,     104+ySpriteOffset, attribute, &g_tileIndex);
+    drawSprite(&sprite_Explosion_Sprites_1, 96+128, 104+ySpriteOffset, attribute, &g_tileIndex);
 
     SPR_update();
-
 
     u16 palTemp[64];
     memcpy(palTemp+ 0, image_Explosion_Background.palette->data, 16*2);
@@ -267,13 +258,11 @@ void scene2()
 #if 1
     waitMs(0250);
 
-    const u16 yOverlayOffset = 0; //IS_PALSYSTEM ? 2 : 0;
+    const u16 yOverlayOffset = IS_PALSYSTEM ? 2 : 0;
     VDP_waitVSync();
     VDP_setMapEx(BG_A, image_Explosion_Overlay.tilemap, TILE_ATTR_FULL(PAL2, TRUE, FALSE, FALSE, indexExplosionOverlay), 8, 20+yOverlayOffset, 0, 0, 24, 7);
 
     waitMs(2000);
-
-    WAIT_FOREVER;
 
     PAL_fadeToAll(palette_black, 32, FALSE);
 
