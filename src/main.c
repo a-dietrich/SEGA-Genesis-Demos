@@ -209,7 +209,7 @@ void scene1()
     const u16 yOverlayOffset = IS_PALSYSTEM ? 2 : 0;
     VDP_waitVSync();
     VDP_setHorizontalScroll(BG_A, 4);
-    VDP_setMapEx(BG_A, image_Planet_Overlay.tilemap, TILE_ATTR_FULL(PAL1, TRUE, FALSE, FALSE, indexPlanetOverlay), 7, 18+yOverlayOffset, 0, 0, 26, 9);
+    VDP_setMapEx(BG_A, image_Planet_Overlay.tilemap, TILE_ATTR_FULL(PAL2, TRUE, FALSE, FALSE, indexPlanetOverlay), 7, 18+yOverlayOffset, 0, 0, 26, 9);
 
     waitMs(2000);
 
@@ -431,7 +431,7 @@ int main()
 
     XGM_startPlay(xgm_01);
 
-    //scene1();    
+    scene1();    
     scene2();
-    //scene3();
+    scene3();
 }
