@@ -117,19 +117,19 @@ u16 loadTileData(TileSet* tileSet)
 void scene1()
 {
 #if 0
-    VDP_PRINT_1(1,1, "image_Planet_Layer0_0.tileset->numTile %0X", image_Planet_Layer0_0.tileset->numTile*32);
-    VDP_PRINT_1(1,2, "image_Planet_Layer0_1.tileset->numTile %0X", image_Planet_Layer0_1.tileset->numTile*32);
-    VDP_PRINT_1(1,3, "image_Planet_Layer0_2.tileset->numTile %0X", image_Planet_Layer0_2.tileset->numTile*32);
+    VDP_PRINT_1(1,1, "image_Planet_Background_0 %0X", image_Planet_Background_0.tileset->numTile*32);
+    VDP_PRINT_1(1,2, "image_Planet_Background_1 %0X", image_Planet_Background_1.tileset->numTile*32);
+    VDP_PRINT_1(1,3, "image_Planet_Background_2 %0X", image_Planet_Background_2.tileset->numTile*32);
 
-    u16 sum = image_Planet_Layer0_0.tileset->numTile*32
-            + image_Planet_Layer0_1.tileset->numTile*32
-            + image_Planet_Layer0_2.tileset->numTile*32;
+    u16 sum = image_Planet_Background_0.tileset->numTile*32
+            + image_Planet_Background_1.tileset->numTile*32
+            + image_Planet_Background_2.tileset->numTile*32;
 
     VDP_PRINT_1(1, 4, "BG sum: %0X", sum);
 
-    VDP_PRINT_1(1, 6, "sprite_Planet_Sprites.maxNumTile %0X", sprite_Planet_Sprites.maxNumTile*32);
+    VDP_PRINT_1(1, 6, "sprite_Planet_Sprites %0X", sprite_Planet_Sprites.maxNumTile*32);
 
-    VDP_PRINT_1(1, 8, "image_Planet_Overlay.tileset->numTile %0X", image_Planet_Overlay.tileset->numTile*32);
+    VDP_PRINT_1(1, 8, "image_Planet_Overlay %0X", image_Planet_Overlay.tileset->numTile*32);
 
     sum += sprite_Planet_Sprites.maxNumTile*32;
     sum += image_Planet_Overlay.tileset->numTile*32;
@@ -142,82 +142,77 @@ void scene1()
     resetScreen();
     resetTileIndex();
 
-    const u16 indexPlanet_L = loadTileData(image_Planet_Layer0_0.tileset);
-    const u16 indexPlanet_M = loadTileData(image_Planet_Layer0_1.tileset);
-    const u16 indexPlanet_R = loadTileData(image_Planet_Layer0_2.tileset);
+    const u16 indexPlanetBackground0 = loadTileData(image_Planet_Background_0.tileset);
+    const u16 indexPlanetBackground1 = loadTileData(image_Planet_Background_1.tileset);
+    const u16 indexPlanetBackground2 = loadTileData(image_Planet_Background_2.tileset);
+    const u16 indexPlanetOverlay     = loadTileData(image_Planet_Overlay.tileset);
 
-    const u16 indexPlanetOverlay = loadTileData(image_Planet_Overlay.tileset);
-    //VDP_loadTileData(image_Overlay.tileset->tiles, index, image_Overlay.tileset->numTile, DMA);
-    //index += image_Overlay.tileset->numTile;
-
-#if 1
     SPR_reset();
 
-    u16 numTile;
-    Sprite* planet = SPR_addSprite(&sprite_Planet_Sprites, 0, 0, TILE_ATTR(PAL3, FALSE, FALSE, FALSE));
+    Sprite* spritePlanet = drawSprite(&sprite_Planet_Sprites, 320, 72, TILE_ATTR(PAL3, FALSE, FALSE, FALSE), &g_tileIndex);
 
-    SPR_setAutoTileUpload(planet, FALSE);
-    SPR_loadAllFrames(&sprite_Planet_Sprites, getTileIndex(), &numTile);
-    SPR_setVRAMTileIndex(planet, getTileIndex());
-    SPR_setFrame(planet, 0);
-    SPR_setVisibility(planet, HIDDEN);
-    // SPR_setPosition(planet, 120+320, 72);
     SPR_update();
-#endif
 
-    VDP_setPaletteColors( 0, image_Planet_Layer0_0.palette->data, 16);
-    VDP_setPaletteColors(16, image_Planet_Layer0_1.palette->data, 16);
-    VDP_setPaletteColors(32, image_Planet_Layer0_2.palette->data, 16);
-    VDP_setPaletteColors(48, palette_Planet_Sprites.data,         16);
+    VDP_waitVSync();
+    VDP_setPaletteColors( 0, image_Planet_Background_0.palette->data, 16);
+    VDP_setPaletteColors(16, image_Planet_Background_1.palette->data, 16);
+    VDP_setPaletteColors(32, image_Planet_Background_2.palette->data, 16);
+    VDP_setPaletteColors(48, sprite_Planet_Sprites.palette->data,     16);
 
-    for (s16 hScroll=0; hScroll<=320; hScroll+=8)
+    // Scroll background
     {
-        SPR_setPosition(planet, 320+120-hScroll-8, 72);
-        SPR_setVisibility(planet, !((320+120-hScroll-8)<320));
-
-        SYS_doVBlankProcess();
-
-        if (hScroll<320)
-            SPR_update();
-
-        VDP_setHorizontalScroll(BG_B, -hScroll);
-
-        const u16 xd = hScroll >> 3;
-
-        const u16 xd0 = image_Planet_Layer0_0.tilemap->w;
-        const u16 xd1 = image_Planet_Layer0_0.tilemap->w + image_Planet_Layer0_1.tilemap->w;
-
-        if (xd < xd0)
+        for (s16 hScroll=0; hScroll<=320; hScroll+=8)
         {
-            const u16 xs = xd;
-            VDP_setMapEx(BG_B, image_Planet_Layer0_0.tilemap, TILE_ATTR_FULL(PAL0, FALSE, FALSE, FALSE, indexPlanet_L), 40+xd, 0, xs, 0, 1, 30);
-        }
-        else if (xd < xd1)
-        {
-            const u16 xs = xd - xd0;
-            VDP_setMapEx(BG_B, image_Planet_Layer0_1.tilemap, TILE_ATTR_FULL(PAL1, FALSE, FALSE, FALSE, indexPlanet_M), 40+xd, 0, xs, 0, 1, 30);
-        }
-        else
-        {
-            const u16 xs = xd - xd1;
-            VDP_setMapEx(BG_B, image_Planet_Layer0_2.tilemap, TILE_ATTR_FULL(PAL2, FALSE, FALSE, FALSE, indexPlanet_R), 40+xd, 0, xs, 0, 1, 30);
+            SPR_setPosition(spritePlanet, 320+120-hScroll-8, 72);
+            SPR_setVisibility(spritePlanet, !((320+120-hScroll-8)<320));
+
+            SYS_doVBlankProcess();
+
+            if (hScroll<320)
+                SPR_update();
+
+            VDP_setHorizontalScroll(BG_B, -hScroll);
+
+            const u16 xd = hScroll >> 3;
+
+            const u16 xd0 = image_Planet_Background_0.tilemap->w;
+            const u16 xd1 = image_Planet_Background_0.tilemap->w + image_Planet_Background_1.tilemap->w;
+
+            if (xd < xd0)
+            {
+                const u16 xs = xd;
+                VDP_setMapEx(BG_B, image_Planet_Background_0.tilemap, TILE_ATTR_FULL(PAL0, FALSE, FALSE, FALSE, indexPlanetBackground0), 40+xd, 0, xs, 0, 1, 30);
+            }
+            else if (xd < xd1)
+            {
+                const u16 xs = xd - xd0;
+                VDP_setMapEx(BG_B, image_Planet_Background_1.tilemap, TILE_ATTR_FULL(PAL1, FALSE, FALSE, FALSE, indexPlanetBackground1), 40+xd, 0, xs, 0, 1, 30);
+            }
+            else
+            {
+                const u16 xs = xd - xd1;
+                VDP_setMapEx(BG_B, image_Planet_Background_2.tilemap, TILE_ATTR_FULL(PAL2, FALSE, FALSE, FALSE, indexPlanetBackground2), 40+xd, 0, xs, 0, 1, 30);
+            }
         }
     }
 
+    // Show overlay text
     waitMs(250);
+    {
+        const u16 yOverlayOffset = IS_PALSYSTEM ? 2 : 0;
+        VDP_waitVSync();
+        VDP_setHorizontalScroll(BG_A, 4);
+        VDP_setMapEx(BG_A, image_Planet_Overlay.tilemap, TILE_ATTR_FULL(PAL2, TRUE, FALSE, FALSE, indexPlanetOverlay), 7, 18+yOverlayOffset, 0, 0, 26, 9);
+    }
 
-    const u16 yOverlayOffset = IS_PALSYSTEM ? 2 : 0;
-    VDP_waitVSync();
-    VDP_setHorizontalScroll(BG_A, 4);
-    VDP_setMapEx(BG_A, image_Planet_Overlay.tilemap, TILE_ATTR_FULL(PAL2, TRUE, FALSE, FALSE, indexPlanetOverlay), 7, 18+yOverlayOffset, 0, 0, 26, 9);
-
+    // Fade to white
     waitMs(2000);
+    {
+        PAL_fadeToAll(palette_white, 32, FALSE);
+    }
 
-    PAL_fadeToAll(palette_white, 32, FALSE);
-
+    // Exit
     waitMs(500);
-
-    resetScreen();
 }
 
 void scene2()
@@ -278,6 +273,7 @@ void scene2()
 void scene3()
 {
     resetScreen();
+    resetTileIndex();
 
 #if 0
     VDP_PRINT_1(1,1, "image_Scene3_0 %0X",  image_Scene3_0.tileset->numTile*32);

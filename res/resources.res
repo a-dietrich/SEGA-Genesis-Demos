@@ -1,25 +1,14 @@
 
 //
-// Scene 1
+// Scene 1 -- Planet
 //
 
-IMAGE   image_Planet_Layer0_0       "gfx/Planet_Layer0-0.png" NONE DUPLICATE
-IMAGE   image_Planet_Layer0_1       "gfx/Planet_Layer0-1.png" NONE DUPLICATE
-IMAGE   image_Planet_Layer0_2       "gfx/Planet_Layer0-2.png" NONE DUPLICATE
+IMAGE   image_Planet_Background_0    "gfx/Planet_Background_0.png" NONE DUPLICATE
+IMAGE   image_Planet_Background_1    "gfx/Planet_Background_1.png" NONE DUPLICATE
+IMAGE   image_Planet_Background_2    "gfx/Planet_Background_2.png" NONE DUPLICATE
+IMAGE   image_Planet_Overlay         "gfx/Planet_Overlay.png"      NONE DUPLICATE
 
-//IMAGE   image_Planet_L              "gfx/Planet_120x240_16_L_512.png" NONE DUPLICATE
-//IMAGE   image_Planet_M              "gfx/Planet_128x240_16_M_512.png" NONE DUPLICATE
-//IMAGE   image_Planet_R              "gfx/Planet_072x240_16_R_512.png" NONE DUPLICATE
-
-IMAGE   image_Planet_Overlay         "gfx/Planet_Overlay.png" NONE DUPLICATE
-
-//IMAGE   Test_R              "gfx/Untitled.png" NONE NONE
-
-//SPRITE  sprite_Planet_M             "gfx/Planet_128x128_16_M_512.png" 16 16 NONE 0 NONE TILE
-//PALETTE palette_Planet_M            "gfx/Planet_128x128_16_M_512.png"
-
-SPRITE  sprite_Planet_Sprites       "gfx/Planet_Sprites.png" 12 16 NONE 0 NONE TILE
-PALETTE palette_Planet_Sprites      "gfx/Planet_Sprites.png"
+SPRITE  sprite_Planet_Sprites        "gfx/Planet_Sprites.png"      12 16 NONE 0 NONE TILE
 
 //
 // Scene 2 -- Explosion
