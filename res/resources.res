@@ -22,28 +22,14 @@ SPRITE  sprite_Planet_Sprites       "gfx/Planet_Sprites.png" 12 16 NONE 0 NONE T
 PALETTE palette_Planet_Sprites      "gfx/Planet_Sprites.png"
 
 //
-// Scene 2
+// Scene 2 -- Explosion
 //
 
 IMAGE   image_Explosion_Background   "gfx/Explosion_Background.png" NONE DUPLICATE
+IMAGE   image_Explosion_Overlay      "gfx/Explosion_Overlay.png"    NONE DUPLICATE
 
-IMAGE   image_Explosion_Overlay      "gfx/Explosion_Overlay.png" NONE DUPLICATE
-
-SPRITE  sprite_Explosion_Sprites_0   "gfx/Explosion_Sprites_0.png" 16 17 NONE 0 NONE TILE
-SPRITE  sprite_Explosion_Sprites_1   "gfx/Explosion_Sprites_1.png" 12 17 NONE 0 NONE TILE
-
-//IMAGE   image_Scene2_0      "gfx/Explosion_Layer0.png" NONE DUPLICATE
-//IMAGE   image_Scene2_1      "gfx/Explosion_Layer1.png" NONE NONE
-
-//SPRITE  sprite_Scene2_0            "gfx/Explosion_Layer1.0.png" 16 17 NONE 0 NONE NONE
-//SPRITE  sprite_Scene2_1            "gfx/Explosion_Layer1.1.png" 15 13 NONE 0 NONE NONE
-//SPRITE  sprite_Scene2_2            "gfx/Explosion_Layer1.2.png"  6  8 NONE 0 NONE NONE
-
-//IMAGE   image_Scene2_Overlay       "gfx/Explosion_Overlay_16.png"  NONE DUPLICATE
-
-//PALETTE palette_Scene2_0           "gfx/Explosion_Layer0.png"
-//PALETTE palette_Scene2_1           "gfx/Explosion_Layer1.0.png"
-//PALETTE palette_Scene2_2           "gfx/Explosion_Overlay_16.png"
+SPRITE  sprite_Explosion_Sprites_0   "gfx/Explosion_Sprites_0.png"  16 17 NONE 0 NONE TILE
+SPRITE  sprite_Explosion_Sprites_1   "gfx/Explosion_Sprites_1.png"  12 17 NONE 0 NONE TILE
 
 //
 // Scene 3

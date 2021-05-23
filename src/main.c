@@ -225,13 +225,13 @@ void scene2()
     resetScreen();
     resetTileIndex();
 
-    const u16 indexScene2 = loadTileData(image_Explosion_Background.tileset);
-    const u16 indexExplosionOverlay = loadTileData(image_Explosion_Overlay.tileset);
+    const u16 indexExplosionBackground = loadTileData(image_Explosion_Background.tileset);
+    const u16 indexExplosionOverlay    = loadTileData(image_Explosion_Overlay.tileset);
  
     VDP_setMapEx(
         BG_B,
         image_Explosion_Background.tilemap,
-        TILE_ATTR_FULL(PAL0, FALSE, FALSE, FALSE, indexScene2),
+        TILE_ATTR_FULL(PAL0, FALSE, FALSE, FALSE, indexExplosionBackground),
         0, 0, 0, 0, image_Explosion_Background.tilemap->w, image_Explosion_Background.tilemap->h
     );
 
@@ -240,36 +240,39 @@ void scene2()
 
     SPR_reset();
 
-    const u16 attribute = TILE_ATTR(PAL1, FALSE, FALSE, FALSE);
-
     const s16 ySpriteOffset = IS_PALSYSTEM ? 0: -16;
+    const u16 attribute = TILE_ATTR(PAL1, FALSE, FALSE, FALSE);
     drawSprite(&sprite_Explosion_Sprites_0, 96,     104+ySpriteOffset, attribute, &g_tileIndex);
     drawSprite(&sprite_Explosion_Sprites_1, 96+128, 104+ySpriteOffset, attribute, &g_tileIndex);
 
     SPR_update();
 
-    u16 palTemp[64];
-    memcpy(palTemp+ 0, image_Explosion_Background.palette->data, 16*2);
-    memcpy(palTemp+16, sprite_Explosion_Sprites_0.palette->data, 16*2);
-    memcpy(palTemp+32, image_Explosion_Overlay.palette->data, 16*3);
+    // Fade in background and sprites
+    {
+        u16 palTemp[64];
+        memcpy(palTemp+ 0, image_Explosion_Background.palette->data, 16*2);
+        memcpy(palTemp+16, sprite_Explosion_Sprites_0.palette->data, 16*2);
+        memcpy(palTemp+32, image_Explosion_Overlay.palette->data,    16*3);
 
-    PAL_fadeToAll(palTemp, 48, FALSE);
+        PAL_fadeToAll(palTemp, 48, FALSE);
+    }
 
-#if 1
+    // Show overlay text
     waitMs(0250);
+    {
+        const u16 yOverlayOffset = IS_PALSYSTEM ? 2 : 0;
+        VDP_waitVSync();
+        VDP_setMapEx(BG_A, image_Explosion_Overlay.tilemap, TILE_ATTR_FULL(PAL2, TRUE, FALSE, FALSE, indexExplosionOverlay), 8, 20+yOverlayOffset, 0, 0, 24, 7);
+    }
 
-    const u16 yOverlayOffset = IS_PALSYSTEM ? 2 : 0;
-    VDP_waitVSync();
-    VDP_setMapEx(BG_A, image_Explosion_Overlay.tilemap, TILE_ATTR_FULL(PAL2, TRUE, FALSE, FALSE, indexExplosionOverlay), 8, 20+yOverlayOffset, 0, 0, 24, 7);
-
+    // Fade to black
     waitMs(2000);
+    {
+        PAL_fadeToAll(palette_black, 32, FALSE);
+    }
 
-    PAL_fadeToAll(palette_black, 32, FALSE);
-
+    // Exit
     waitMs(500);
-
-    resetScreen();
-#endif
 }
 
 void scene3()
