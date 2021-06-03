@@ -276,35 +276,88 @@ void scene3()
     resetTileIndex();
 
 #if 0
-    VDP_PRINT_1(1,1, "image_Scene3_0 %0X",  image_Scene3_0.tileset->numTile*32);
-    VDP_PRINT_1(1,2, "image_Overlay_2 %0X", image_Overlay_2.tileset->numTile*32);
+    VDP_PRINT_1(1,1, "image_Hangar_Background %0X",image_Hangar_Background.tileset->numTile*32);
+    VDP_PRINT_1(1,2, "image_Hangar_Overlay    %0X",image_Hangar_Overlay.tileset->numTile*32);
 
-    u16 sum = image_Scene3_0.tileset->numTile*32
-            + image_Overlay_2.tileset->numTile*32;
+    u16 sum = image_Hangar_Background.tileset->numTile*32;
+            + image_Hangar_Overlay.tileset->numTile*32;
 
     VDP_PRINT_1(1, 4, "BG sum: %0X", sum);
 
-    VDP_PRINT_1(1, 6, "sprite_Hangar_0 %0X", 32*sprite_Hangar_0.animations[0]->frames[0]->tileset->numTile);
-    VDP_PRINT_1(1, 7, "sprite_Hangar_1 %0X", 32*sprite_Hangar_1.animations[0]->frames[0]->tileset->numTile);
-    VDP_PRINT_1(1, 8, "sprite_Hangar_2 %0X", 32*sprite_Hangar_2.animations[0]->frames[0]->tileset->numTile);
-    VDP_PRINT_1(1, 9, "sprite_Hangar_3 %0X", 32*sprite_Hangar_3.animations[0]->frames[0]->tileset->numTile);
+    VDP_PRINT_1(1, 6, "sprite_Hangar_Sprites_0 %0X", 32*sprite_Hangar_Sprites_0.animations[0]->frames[0]->tileset->numTile);
+    VDP_PRINT_1(1, 7, "sprite_Hangar_Sprites_1 %0X", 32*sprite_Hangar_Sprites_1.animations[0]->frames[0]->tileset->numTile);
+    VDP_PRINT_1(1, 8, "sprite_Hangar_Sprites_2 %0X", 32*sprite_Hangar_Sprites_2.animations[0]->frames[0]->tileset->numTile);
+    VDP_PRINT_1(1, 9, "sprite_Hangar_Sprites_3 %0X", 32*sprite_Hangar_Sprites_3.animations[0]->frames[0]->tileset->numTile);
+    VDP_PRINT_1(1,10, "sprite_Hangar_Sprites_4 %0X", 32*sprite_Hangar_Sprites_4.animations[0]->frames[0]->tileset->numTile);
+    VDP_PRINT_1(1,11, "sprite_Hangar_Sprites_5 %0X", 32*sprite_Hangar_Sprites_5.animations[0]->frames[0]->tileset->numTile);
+    VDP_PRINT_1(1,12, "sprite_Hangar_Sprites_6 %0X", 32*sprite_Hangar_Sprites_6.animations[0]->frames[0]->tileset->numTile);
 
-    VDP_PRINT_1(1,10, "sprite_Hangar_4 %0X", 32*sprite_Hangar_4.animations[0]->frames[0]->tileset->numTile);
-    VDP_PRINT_1(1,11, "sprite_Hangar_5 %0X", 32*sprite_Hangar_5.animations[0]->frames[0]->tileset->numTile);
-    VDP_PRINT_1(1,12, "sprite_Hangar_6 %0X", 32*sprite_Hangar_6.animations[0]->frames[0]->tileset->numTile);
-
-    sum += 32*sprite_Hangar_0.animations[0]->frames[0]->tileset->numTile;
-    sum += 32*sprite_Hangar_1.animations[0]->frames[0]->tileset->numTile;
-    sum += 32*sprite_Hangar_2.animations[0]->frames[0]->tileset->numTile;
-    sum += 32*sprite_Hangar_3.animations[0]->frames[0]->tileset->numTile;
-    sum += 32*sprite_Hangar_4.animations[0]->frames[0]->tileset->numTile;
-    sum += 32*sprite_Hangar_5.animations[0]->frames[0]->tileset->numTile;
-    sum += 32*sprite_Hangar_6.animations[0]->frames[0]->tileset->numTile;
+    sum += 32*sprite_Hangar_Sprites_0.animations[0]->frames[0]->tileset->numTile;
+    sum += 32*sprite_Hangar_Sprites_1.animations[0]->frames[0]->tileset->numTile;
+    sum += 32*sprite_Hangar_Sprites_2.animations[0]->frames[0]->tileset->numTile;
+    sum += 32*sprite_Hangar_Sprites_3.animations[0]->frames[0]->tileset->numTile;
+    sum += 32*sprite_Hangar_Sprites_4.animations[0]->frames[0]->tileset->numTile;
+    sum += 32*sprite_Hangar_Sprites_5.animations[0]->frames[0]->tileset->numTile;
+    sum += 32*sprite_Hangar_Sprites_6.animations[0]->frames[0]->tileset->numTile;
 
     VDP_PRINT_1(1, 14, "Total sum: %0X", sum);
 
     while(1);
 #endif
+
+    const u16 indexHangarBackground = loadTileData(image_Hangar_Background.tileset);
+    const u16 indexHangarOverlay    = loadTileData(image_Hangar_Overlay.tileset);
+
+    VDP_setMapEx(
+        BG_B,
+        image_Hangar_Background.tilemap,
+        TILE_ATTR_FULL(PAL0, FALSE, FALSE, FALSE, indexHangarBackground),
+        0, 0, 0, 0, image_Hangar_Background.tilemap->w, image_Hangar_Background.tilemap->h
+    );
+
+    SPR_reset();
+
+    const u16 attribute1 = TILE_ATTR(PAL1, FALSE, FALSE, FALSE);
+    drawSprite(&sprite_Hangar_Sprites_0, 0,    28, attribute1, &g_tileIndex);
+    drawSprite(&sprite_Hangar_Sprites_1, 0+64, 28, attribute1, &g_tileIndex);
+
+    const u16 attribute2 = TILE_ATTR(PAL2, FALSE, FALSE, FALSE);
+    drawSprite(&sprite_Hangar_Sprites_2, 136, 152, attribute2, &g_tileIndex);
+    drawSprite(&sprite_Hangar_Sprites_3, 200, 152, attribute2, &g_tileIndex);
+    drawSprite(&sprite_Hangar_Sprites_4, 256,  72, attribute2, &g_tileIndex);
+
+    const u16 attribute3 = TILE_ATTR(PAL3, FALSE, FALSE, FALSE);
+    drawSprite(&sprite_Hangar_Sprites_5, 136, 160, attribute3, &g_tileIndex);
+    drawSprite(&sprite_Hangar_Sprites_6, 200, 152, attribute3, &g_tileIndex);
+
+    SPR_update();
+
+    u16 palTemp[64];
+    memcpy(palTemp+ 0, image_Hangar_Background.palette->data, 16*2);
+    memcpy(palTemp+16, sprite_Hangar_Sprites_0.palette->data, 16*2);
+    memcpy(palTemp+32, sprite_Hangar_Sprites_2.palette->data, 16*2);
+    memcpy(palTemp+48, sprite_Hangar_Sprites_5.palette->data, 16*2);
+
+    PAL_fadeToAll(palTemp, 48, FALSE);
+
+    // Show overlay text
+    waitMs(0250);
+    {
+        VDP_waitVSync();
+        VDP_setMapEx(BG_A, image_Hangar_Overlay.tilemap, TILE_ATTR_FULL(PAL1, TRUE, FALSE, FALSE, indexHangarOverlay), 6, 1, 0, 0, 28, 9);
+    }
+
+    // Fade to black
+    waitMs(2000);
+    {
+        PAL_fadeToAll(palette_black, 32, FALSE);
+    }
+
+    // Exit
+    waitMs(500);
+
+#if 0
+
 
     u16 index = TILE_STARTINDEX;
 
@@ -387,6 +440,73 @@ void scene3()
 
     VDP_setMapEx(BG_A, image_Overlay_2.tilemap, TILE_ATTR_FULL(PAL3, TRUE, FALSE, FALSE, indexPlanetOverlay), 1, 1, 0, 0, 38, 9);
 #endif
+#endif
+}
+
+void scene4()
+{
+    resetScreen();
+    resetTileIndex();
+
+    const u16 indexTitleBackground = loadTileData(image_Title_Background.tileset);
+    const u16 indexTitleOverlay    = loadTileData(image_Title_Overlay.tileset);
+
+    VDP_setMapEx(
+        BG_B,
+        image_Title_Background.tilemap,
+        TILE_ATTR_FULL(PAL0, FALSE, FALSE, FALSE, indexTitleBackground),
+        0, 0, 0, 0, image_Title_Background.tilemap->w, image_Title_Background.tilemap->h
+    );
+    
+    const s16 yBackgroundOffset = IS_PALSYSTEM ? 0 : 16;
+    VDP_setVerticalScroll(BG_B, yBackgroundOffset);
+
+    SPR_reset();
+
+    const s16 ySpriteOffset = IS_PALSYSTEM ? 0: -16;
+
+    const u16 attribute1 = TILE_ATTR(PAL1, FALSE, FALSE, FALSE);
+    drawSprite(&sprite_Title_Sprites_0,   32,   0+ySpriteOffset, attribute1, &g_tileIndex);
+    drawSprite(&sprite_Title_Sprites_1,   96, 112+ySpriteOffset, attribute1, &g_tileIndex);
+    drawSprite(&sprite_Title_Sprites_2,  152,  40+ySpriteOffset, attribute1, &g_tileIndex);
+    drawSprite(&sprite_Title_Sprites_3,    8, 152+ySpriteOffset, attribute1, &g_tileIndex);
+    drawSprite(&sprite_Title_Sprites_4,  152, 200+ySpriteOffset, attribute1, &g_tileIndex);
+    drawSprite(&sprite_Title_Sprites_5,  288, 112+ySpriteOffset, attribute1, &g_tileIndex);
+    drawSprite(&sprite_Title_Sprites_6,  232,  72+ySpriteOffset, attribute1, &g_tileIndex);
+    drawSprite(&sprite_Title_Sprites_7,  200,  16+ySpriteOffset, attribute1, &g_tileIndex);
+    drawSprite(&sprite_Title_Sprites_8,  216,  48+ySpriteOffset, attribute1, &g_tileIndex);
+
+    const u16 attribute2 = TILE_ATTR(PAL2, FALSE, FALSE, FALSE);
+    drawSprite(&sprite_Title_Sprites_9,   72, 224+ySpriteOffset, attribute2, &g_tileIndex);
+    drawSprite(&sprite_Title_Sprites_10, 160, 144+ySpriteOffset, attribute2, &g_tileIndex);
+    drawSprite(&sprite_Title_Sprites_11,   8, 176+ySpriteOffset, attribute2, &g_tileIndex);
+    drawSprite(&sprite_Title_Sprites_12,  28,  54+ySpriteOffset, attribute2, &g_tileIndex);
+    drawSprite(&sprite_Title_Sprites_13, 288, 192+ySpriteOffset, attribute2, &g_tileIndex);
+    drawSprite(&sprite_Title_Sprites_14, 264, 120+ySpriteOffset, attribute2, &g_tileIndex);
+    drawSprite(&sprite_Title_Sprites_15, 240,  64+ySpriteOffset, attribute2, &g_tileIndex);
+    drawSprite(&sprite_Title_Sprites_16, 216,   0+ySpriteOffset, attribute2, &g_tileIndex);
+
+    const u16 attribute3 = TILE_ATTR(PAL3, FALSE, FALSE, FALSE);
+    drawSprite(&sprite_Title_Sprites_17, 168, 120+ySpriteOffset, attribute3, &g_tileIndex);
+    drawSprite(&sprite_Title_Sprites_18, 240,  64+ySpriteOffset, attribute3, &g_tileIndex);
+
+    SPR_update();
+
+    u16 palTemp[64];
+    memcpy(palTemp+ 0, image_Title_Background.palette->data, 16*2);
+    memcpy(palTemp+16, sprite_Title_Sprites_0.palette->data, 16*2);
+    memcpy(palTemp+32, sprite_Title_Sprites_9.palette->data, 16*2);
+    memcpy(palTemp+48, sprite_Title_Sprites_17.palette->data, 16*2);
+
+    PAL_fadeToAll(palTemp, 32, FALSE);
+
+    // Show overlay text
+    waitMs(0250);
+    {
+        VDP_waitVSync();
+        VDP_setMapEx(BG_A, image_Title_Overlay.tilemap, TILE_ATTR_FULL(PAL3, TRUE, FALSE, FALSE, indexTitleOverlay), 6, 1, 0, 0, 28, 5);
+    }
+
 }
 
 int main()
@@ -426,11 +546,12 @@ int main()
 
     SPR_init();
 
-    // PAL_setColors(0, palette_black, 64);
+    PAL_setColors(0, palette_black, 64);
 
-    XGM_startPlay(xgm_01);
+    // XGM_startPlay(xgm_01);
 
     scene1();    
     scene2();
     scene3();
+    scene4();
 }
