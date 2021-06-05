@@ -1,8 +1,11 @@
 
 // *****************************************************************************
-//  Scaling Example
+//  Thunder Force II Intro
 //
 //  Written in 2021 by Andreas Dietrich
+//
+//  Based on the X68000 Thunder Force II version
+//  Copyright(c) 1988 Tecnosoft
 // *****************************************************************************
 
 // -----------------------------------------------------------------------------
@@ -16,6 +19,18 @@
 #include "resources.h"
 
 #include "Helpers.h"
+
+// -----------------------------------------------------------------------------
+//  Defines
+// -----------------------------------------------------------------------------
+
+#define TITLE_BGA_ADDR           0xC000
+#define TITLE_BGB_ADDR           0xE000
+#define TITLE_WINDOW_ADDR        0xF000
+#define TITLE_HSCROLL_TABLE_ADDR 0xF800
+#define TITLE_SPRITE_LIST_ADDR   0xFC00
+
+#define TILE_STARTINDEX          TILE_USERINDEX
 
 // *****************************************************************************
 //
@@ -51,23 +66,8 @@ u16 g_tileIndex = 0;
     sprintf(buffer, fmt, arg0);      \
     VDP_drawText(buffer, x, y);      \
 }
-    
-Sprite* drawSprite(const SpriteDefinition* spriteDef, s16 x, s16 y, u16 attribute, u16* index)
-{
-    Sprite* sprite = SPR_addSprite(spriteDef, 0, 0, attribute);
 
-    u16 numTiles;
-    SPR_loadAllFrames(spriteDef, *index, &numTiles);
-    SPR_setAutoTileUpload(sprite, FALSE);
-    SPR_setVRAMTileIndex(sprite, *index);
-    SPR_setPosition(sprite, x, y);
-    SPR_setFrame(sprite, 0);
-    SPR_setVisibility(sprite, VISIBLE);
-
-    *index += numTiles;
-
-    return sprite;
-}
+// -----------------------------------------------------------------------------
 
 void resetScreen()
 {
@@ -77,18 +77,42 @@ void resetScreen()
     VDP_setVerticalScroll(BG_B, 0);
     VDP_clearPlane(BG_A, TRUE);
     VDP_clearPlane(BG_B, TRUE);
-    VDP_clearSprites();
 }
+
+// -----------------------------------------------------------------------------
+
+Sprite* drawSprite(const SpriteDefinition* spriteDef, s16 x, s16 y, u16 attribute)
+{
+    Sprite* sprite = SPR_addSprite(spriteDef, 0, 0, attribute);
+
+    u16 numTiles;
+    SPR_loadAllFrames(spriteDef, g_tileIndex, &numTiles);
+    SPR_setAutoTileUpload(sprite, FALSE);
+    SPR_setVRAMTileIndex(sprite, g_tileIndex);
+    SPR_setPosition(sprite, x, y);
+    SPR_setFrame(sprite, 0);
+    SPR_setVisibility(sprite, VISIBLE);
+
+    g_tileIndex += numTiles;
+
+    return sprite;
+}
+
+// -----------------------------------------------------------------------------
 
 void resetTileIndex()
 {
     g_tileIndex = TILE_USERINDEX;
 }
 
+// -----------------------------------------------------------------------------
+
 u16 getTileIndex()
 {
     return g_tileIndex;
 }
+
+// -----------------------------------------------------------------------------
 
 u16 loadTileData(TileSet* tileSet)
 {
@@ -100,19 +124,25 @@ u16 loadTileData(TileSet* tileSet)
     return startIndex;
 }
 
+// -----------------------------------------------------------------------------
+
+void fadePalettes(const u16* pal0, const u16* pal1, const u16* pal2, const u16* pal3, u16 numFrames, bool async)
+{
+    u16 palTemp[64];
+    if (pal0) memcpy(palTemp+ 0, pal0, 16*2);
+    if (pal1) memcpy(palTemp+16, pal1, 16*2);
+    if (pal2) memcpy(palTemp+32, pal2, 16*2);
+    if (pal3) memcpy(palTemp+48, pal3, 16*2);
+
+    PAL_fadeToAll(palTemp, numFrames, async);
+}
+
 // *****************************************************************************
 //
 //  Main
 //
 // *****************************************************************************
 
-#define TITLE_BGA_ADDR           0xC000
-#define TITLE_BGB_ADDR           0xE000
-#define TITLE_WINDOW_ADDR        0xF000
-#define TITLE_HSCROLL_TABLE_ADDR 0xF800
-#define TITLE_SPRITE_LIST_ADDR   0xFC00
-
-#define TILE_STARTINDEX          TILE_USERINDEX
 
 void scene1()
 {
@@ -149,7 +179,7 @@ void scene1()
 
     SPR_reset();
 
-    Sprite* spritePlanet = drawSprite(&sprite_Planet_Sprites, 320, 72, TILE_ATTR(PAL3, FALSE, FALSE, FALSE), &g_tileIndex);
+    Sprite* spritePlanet = drawSprite(&sprite_Planet_Sprites, 320, 72, TILE_ATTR(PAL3, FALSE, FALSE, FALSE));
 
     SPR_update();
 
@@ -235,22 +265,22 @@ void scene2()
 
     SPR_reset();
 
-    const s16 ySpriteOffset = IS_PALSYSTEM ? 0: -16;
+    const s16 ySpriteOffset = IS_PALSYSTEM ? 0 : -16;
     const u16 attribute = TILE_ATTR(PAL1, FALSE, FALSE, FALSE);
-    drawSprite(&sprite_Explosion_Sprites_0, 96,     104+ySpriteOffset, attribute, &g_tileIndex);
-    drawSprite(&sprite_Explosion_Sprites_1, 96+128, 104+ySpriteOffset, attribute, &g_tileIndex);
+    drawSprite(&sprite_Explosion_Sprites_0, 96,     104+ySpriteOffset, attribute);
+    drawSprite(&sprite_Explosion_Sprites_1, 96+128, 104+ySpriteOffset, attribute);
 
     SPR_update();
 
     // Fade in background and sprites
-    {
-        u16 palTemp[64];
-        memcpy(palTemp+ 0, image_Explosion_Background.palette->data, 16*2);
-        memcpy(palTemp+16, sprite_Explosion_Sprites_0.palette->data, 16*2);
-        memcpy(palTemp+32, image_Explosion_Overlay.palette->data,    16*3);
-
-        PAL_fadeToAll(palTemp, 48, FALSE);
-    }
+    fadePalettes(
+        image_Explosion_Background.palette->data,
+        sprite_Explosion_Sprites_0.palette->data,
+        image_Explosion_Overlay.palette->data,
+        NULL,
+        48,
+        FALSE
+    );
 
     // Show overlay text
     waitMs(0250);
@@ -318,27 +348,28 @@ void scene3()
     SPR_reset();
 
     const u16 attribute1 = TILE_ATTR(PAL1, FALSE, FALSE, FALSE);
-    drawSprite(&sprite_Hangar_Sprites_0, 0,    28, attribute1, &g_tileIndex);
-    drawSprite(&sprite_Hangar_Sprites_1, 0+64, 28, attribute1, &g_tileIndex);
+    drawSprite(&sprite_Hangar_Sprites_0, 0,    28, attribute1);
+    drawSprite(&sprite_Hangar_Sprites_1, 0+64, 28, attribute1);
 
     const u16 attribute2 = TILE_ATTR(PAL2, FALSE, FALSE, FALSE);
-    drawSprite(&sprite_Hangar_Sprites_2, 136, 152, attribute2, &g_tileIndex);
-    drawSprite(&sprite_Hangar_Sprites_3, 200, 152, attribute2, &g_tileIndex);
-    drawSprite(&sprite_Hangar_Sprites_4, 256,  72, attribute2, &g_tileIndex);
+    drawSprite(&sprite_Hangar_Sprites_2, 136, 152, attribute2);
+    drawSprite(&sprite_Hangar_Sprites_3, 200, 152, attribute2);
+    drawSprite(&sprite_Hangar_Sprites_4, 256,  72, attribute2);
 
     const u16 attribute3 = TILE_ATTR(PAL3, FALSE, FALSE, FALSE);
-    drawSprite(&sprite_Hangar_Sprites_5, 136, 160, attribute3, &g_tileIndex);
-    drawSprite(&sprite_Hangar_Sprites_6, 200, 152, attribute3, &g_tileIndex);
+    drawSprite(&sprite_Hangar_Sprites_5, 136, 160, attribute3);
+    drawSprite(&sprite_Hangar_Sprites_6, 200, 152, attribute3);
 
     SPR_update();
 
-    u16 palTemp[64];
-    memcpy(palTemp+ 0, image_Hangar_Background.palette->data, 16*2);
-    memcpy(palTemp+16, sprite_Hangar_Sprites_0.palette->data, 16*2);
-    memcpy(palTemp+32, sprite_Hangar_Sprites_2.palette->data, 16*2);
-    memcpy(palTemp+48, sprite_Hangar_Sprites_5.palette->data, 16*2);
-
-    PAL_fadeToAll(palTemp, 48, FALSE);
+    fadePalettes(
+        image_Hangar_Background.palette->data,
+        sprite_Hangar_Sprites_0.palette->data,
+        sprite_Hangar_Sprites_2.palette->data,
+        sprite_Hangar_Sprites_5.palette->data,
+        48,
+        FALSE
+    );
 
     // Show overlay text
     waitMs(0250);
@@ -355,92 +386,6 @@ void scene3()
 
     // Exit
     waitMs(500);
-
-#if 0
-
-
-    u16 index = TILE_STARTINDEX;
-
-    const u16 indexScene3_0 = index;
-    VDP_loadTileData(image_Scene3_0.tileset->tiles, index, image_Scene3_0.tileset->numTile, DMA);
-    index += image_Scene3_0.tileset->numTile;
-
-    VDP_setMapEx(
-        BG_B,
-        image_Scene3_0.tilemap,
-        TILE_ATTR_FULL(PAL0, FALSE, FALSE, FALSE, indexScene3_0),
-        0, 0, 0, 0, image_Scene3_0.tilemap->w, image_Scene3_0.tilemap->h
-    );
-
-#if 0
-   VDP_drawImageEx( BG_B,
-                    &image_Scene3_0,
-                    TILE_ATTR_FULL(PAL0, FALSE, FALSE, FALSE, TILE_USERINDEX),
-                    0, 0,
-                    TRUE,
-                    DMA );
-   VDP_drawImageEx( BG_A,
-                    &image_Scene3_2,
-                    TILE_ATTR_FULL(PAL1, FALSE, FALSE, FALSE, TILE_USERINDEX+0x7000/32),
-                    0, 0,
-                    TRUE,
-                    DMA );
-#endif
-
-    u16 numTile;
-
-    Sprite* drawSprite(const SpriteDefinition* spriteDef, s16 x, s16 y, u16 attribute)
-    {
-        Sprite* sprite = SPR_addSprite(spriteDef, 0, 0, attribute);
-
-        SPR_loadAllFrames(spriteDef, index, &numTile);
-        SPR_setAutoTileUpload(sprite, FALSE);
-        SPR_setVRAMTileIndex(sprite, index);
-        SPR_setPosition(sprite, x, y);
-        SPR_setFrame(sprite, 0);
-        SPR_setVisibility(sprite, VISIBLE);
-
-        index += numTile;
-
-        return sprite;
-    }
-
-    SPR_init();
-
-    // Sprite* ship = SPR_addSprite(&sprite_Hangar_0, 0, 0, TILE_ATTR(PAL2, FALSE, FALSE, FALSE));
-    // Sprite* spr1 = SPR_addSprite(&sprite_Hangar_1, 0, 0, TILE_ATTR(PAL2, FALSE, FALSE, FALSE));
-
-    u16 attribute = TILE_ATTR(PAL1, FALSE, FALSE, FALSE);
-
-    drawSprite(&sprite_Hangar_0,   0,  32, attribute);
-    drawSprite(&sprite_Hangar_1,  72, 152, attribute);
-    drawSprite(&sprite_Hangar_2, 160, 160, attribute);
-    drawSprite(&sprite_Hangar_3, 216, 152, attribute);
-
-    attribute = TILE_ATTR(PAL2, FALSE, FALSE, FALSE);
-
-    drawSprite(&sprite_Hangar_4,  72, 152, attribute);
-    drawSprite(&sprite_Hangar_5, 168, 152, attribute);
-    drawSprite(&sprite_Hangar_6, 232,  72, attribute);
-
-    SPR_update();
-
-    u16 palTemp[64];
-    memcpy(palTemp+ 0, palette_Hangar_0.data, 16*2);
-    memcpy(palTemp+16, palette_Hangar_1.data, 16*2);
-    memcpy(palTemp+32, palette_Hangar_2.data, 16*2);
-    memcpy(palTemp+48, palette_Hangar_3.data, 16*2);
-
-    PAL_fadeToAll(palTemp, 48, FALSE);
-
-#if 1
-    const u16 indexPlanetOverlay = index;
-    VDP_loadTileData(image_Overlay_2.tileset->tiles, index, image_Overlay_2.tileset->numTile, DMA);
-    index += image_Overlay_2.tileset->numTile;
-
-    VDP_setMapEx(BG_A, image_Overlay_2.tilemap, TILE_ATTR_FULL(PAL3, TRUE, FALSE, FALSE, indexPlanetOverlay), 1, 1, 0, 0, 38, 9);
-#endif
-#endif
 }
 
 void scene4()
@@ -466,39 +411,40 @@ void scene4()
     const s16 ySpriteOffset = IS_PALSYSTEM ? 0: -16;
 
     const u16 attribute1 = TILE_ATTR(PAL1, FALSE, FALSE, FALSE);
-    drawSprite(&sprite_Title_Sprites_0,   32,   0+ySpriteOffset, attribute1, &g_tileIndex);
-    drawSprite(&sprite_Title_Sprites_1,   96, 112+ySpriteOffset, attribute1, &g_tileIndex);
-    drawSprite(&sprite_Title_Sprites_2,  152,  40+ySpriteOffset, attribute1, &g_tileIndex);
-    drawSprite(&sprite_Title_Sprites_3,    8, 152+ySpriteOffset, attribute1, &g_tileIndex);
-    drawSprite(&sprite_Title_Sprites_4,  152, 200+ySpriteOffset, attribute1, &g_tileIndex);
-    drawSprite(&sprite_Title_Sprites_5,  288, 112+ySpriteOffset, attribute1, &g_tileIndex);
-    drawSprite(&sprite_Title_Sprites_6,  232,  72+ySpriteOffset, attribute1, &g_tileIndex);
-    drawSprite(&sprite_Title_Sprites_7,  200,  16+ySpriteOffset, attribute1, &g_tileIndex);
-    drawSprite(&sprite_Title_Sprites_8,  216,  48+ySpriteOffset, attribute1, &g_tileIndex);
+    drawSprite(&sprite_Title_Sprites_0,   32,   0+ySpriteOffset, attribute1);
+    drawSprite(&sprite_Title_Sprites_1,   96, 112+ySpriteOffset, attribute1);
+    drawSprite(&sprite_Title_Sprites_2,  152,  40+ySpriteOffset, attribute1);
+    drawSprite(&sprite_Title_Sprites_3,    8, 152+ySpriteOffset, attribute1);
+    drawSprite(&sprite_Title_Sprites_4,  152, 200+ySpriteOffset, attribute1);
+    drawSprite(&sprite_Title_Sprites_5,  288, 112+ySpriteOffset, attribute1);
+    drawSprite(&sprite_Title_Sprites_6,  232,  72+ySpriteOffset, attribute1);
+    drawSprite(&sprite_Title_Sprites_7,  200,  16+ySpriteOffset, attribute1);
+    drawSprite(&sprite_Title_Sprites_8,  216,  48+ySpriteOffset, attribute1);
 
     const u16 attribute2 = TILE_ATTR(PAL2, FALSE, FALSE, FALSE);
-    drawSprite(&sprite_Title_Sprites_9,   72, 224+ySpriteOffset, attribute2, &g_tileIndex);
-    drawSprite(&sprite_Title_Sprites_10, 160, 144+ySpriteOffset, attribute2, &g_tileIndex);
-    drawSprite(&sprite_Title_Sprites_11,   8, 176+ySpriteOffset, attribute2, &g_tileIndex);
-    drawSprite(&sprite_Title_Sprites_12,  28,  54+ySpriteOffset, attribute2, &g_tileIndex);
-    drawSprite(&sprite_Title_Sprites_13, 288, 192+ySpriteOffset, attribute2, &g_tileIndex);
-    drawSprite(&sprite_Title_Sprites_14, 264, 120+ySpriteOffset, attribute2, &g_tileIndex);
-    drawSprite(&sprite_Title_Sprites_15, 240,  64+ySpriteOffset, attribute2, &g_tileIndex);
-    drawSprite(&sprite_Title_Sprites_16, 216,   0+ySpriteOffset, attribute2, &g_tileIndex);
+    drawSprite(&sprite_Title_Sprites_9,   72, 224+ySpriteOffset, attribute2);
+    drawSprite(&sprite_Title_Sprites_10, 160, 144+ySpriteOffset, attribute2);
+    drawSprite(&sprite_Title_Sprites_11,   8, 176+ySpriteOffset, attribute2);
+    drawSprite(&sprite_Title_Sprites_12,  28,  54+ySpriteOffset, attribute2);
+    drawSprite(&sprite_Title_Sprites_13, 288, 192+ySpriteOffset, attribute2);
+    drawSprite(&sprite_Title_Sprites_14, 264, 120+ySpriteOffset, attribute2);
+    drawSprite(&sprite_Title_Sprites_15, 240,  64+ySpriteOffset, attribute2);
+    drawSprite(&sprite_Title_Sprites_16, 216,   0+ySpriteOffset, attribute2);
 
     const u16 attribute3 = TILE_ATTR(PAL3, FALSE, FALSE, FALSE);
-    drawSprite(&sprite_Title_Sprites_17, 168, 120+ySpriteOffset, attribute3, &g_tileIndex);
-    drawSprite(&sprite_Title_Sprites_18, 240,  64+ySpriteOffset, attribute3, &g_tileIndex);
+    drawSprite(&sprite_Title_Sprites_17, 168, 120+ySpriteOffset, attribute3);
+    drawSprite(&sprite_Title_Sprites_18, 240,  64+ySpriteOffset, attribute3);
 
     SPR_update();
 
-    u16 palTemp[64];
-    memcpy(palTemp+ 0, image_Title_Background.palette->data, 16*2);
-    memcpy(palTemp+16, sprite_Title_Sprites_0.palette->data, 16*2);
-    memcpy(palTemp+32, sprite_Title_Sprites_9.palette->data, 16*2);
-    memcpy(palTemp+48, sprite_Title_Sprites_17.palette->data, 16*2);
-
-    PAL_fadeToAll(palTemp, 32, FALSE);
+    fadePalettes(
+        image_Title_Background.palette->data,
+        sprite_Title_Sprites_0.palette->data,
+        sprite_Title_Sprites_9.palette->data,
+        sprite_Title_Sprites_17.palette->data,
+        48,
+        FALSE
+    );
 
     // Show overlay text
     waitMs(0250);
@@ -530,14 +476,12 @@ int main()
     // Initalization
     //
 
-#if 1
     // VDP memory layout
     VDP_setBGAAddress         ( TITLE_BGA_ADDR           );
     VDP_setBGBAddress         ( TITLE_BGB_ADDR           );
     VDP_setWindowAddress      ( TITLE_WINDOW_ADDR        );
     VDP_setSpriteListAddress  ( TITLE_SPRITE_LIST_ADDR   );
     VDP_setHScrollTableAddress( TITLE_HSCROLL_TABLE_ADDR );
-#endif
 
     // Setup VDP
     VDP_setScreenHeight240();
