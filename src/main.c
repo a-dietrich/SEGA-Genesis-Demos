@@ -148,19 +148,18 @@ void scene1()
     VDP_PRINT_1(1,1, "image_Planet_Background_0 %0X", image_Planet_Background_0.tileset->numTile*32);
     VDP_PRINT_1(1,2, "image_Planet_Background_1 %0X", image_Planet_Background_1.tileset->numTile*32);
     VDP_PRINT_1(1,3, "image_Planet_Background_2 %0X", image_Planet_Background_2.tileset->numTile*32);
+    VDP_PRINT_1(1,4, "image_Planet_Overlay      %0X", image_Planet_Overlay.tileset->numTile*32);
 
     u16 sum = image_Planet_Background_0.tileset->numTile*32
             + image_Planet_Background_1.tileset->numTile*32
-            + image_Planet_Background_2.tileset->numTile*32;
+            + image_Planet_Background_2.tileset->numTile*32
+            + image_Planet_Overlay.tileset->numTile*32;
 
-    VDP_PRINT_1(1, 4, "BG sum: %0X", sum);
+    VDP_PRINT_1(1, 6, "BG sum: %0X", sum);
 
-    VDP_PRINT_1(1, 6, "sprite_Planet_Sprites %0X", sprite_Planet_Sprites.maxNumTile*32);
-
-    VDP_PRINT_1(1, 8, "image_Planet_Overlay %0X", image_Planet_Overlay.tileset->numTile*32);
+    VDP_PRINT_1(1, 8, "sprite_Planet_Sprites %0X", sprite_Planet_Sprites.maxNumTile*32);
 
     sum += sprite_Planet_Sprites.maxNumTile*32;
-    sum += image_Planet_Overlay.tileset->numTile*32;
 
     VDP_PRINT_1(1, 10, "Total sum: %0X", sum);
 
@@ -247,21 +246,20 @@ void scene2()
 {
 #if 0
     VDP_PRINT_1(1, 1, "image_Explosion_Background %0X", image_Explosion_Background.tileset->numTile*32);
+    VDP_PRINT_1(1, 2, "image_Explosion_Overlay    %0X", image_Explosion_Overlay.tileset->numTile*32);
 
-    u16 sum = image_Explosion_Background.tileset->numTile*32;
+    u16 sum = image_Explosion_Background.tileset->numTile*32
+            + image_Explosion_Overlay.tileset->numTile*32;
 
-    VDP_PRINT_1(1, 3, "BG sum: %0X", sum);
+    VDP_PRINT_1(1, 4, "BG sum: %0X", sum);
 
-    VDP_PRINT_1(1, 5, "sprite_Explosion_Sprites_0 %0X", sprite_Explosion_Sprites_0.maxNumTile*32);
-    VDP_PRINT_1(1, 6, "sprite_Explosion_Sprites_1 %0X", sprite_Explosion_Sprites_1.maxNumTile*32);
-
-    VDP_PRINT_1(1, 8, "image_Explosion_Overlay %0X", image_Explosion_Overlay.tileset->numTile*32);
+    VDP_PRINT_1(1, 6, "sprite_Explosion_Sprites_0 %0X", sprite_Explosion_Sprites_0.maxNumTile*32);
+    VDP_PRINT_1(1, 7, "sprite_Explosion_Sprites_1 %0X", sprite_Explosion_Sprites_1.maxNumTile*32);
 
     sum += sprite_Explosion_Sprites_0.maxNumTile*32;
     sum += sprite_Explosion_Sprites_1.maxNumTile*32;
-    sum += image_Explosion_Overlay.tileset->numTile*32;
 
-    VDP_PRINT_1(1, 10, "Total sum: %0X", sum);
+    VDP_PRINT_1(1, 9, "Total sum: %0X", sum);
 
     while(1);
 #endif
@@ -321,9 +319,6 @@ void scene2()
 
 void scene3()
 {
-    resetScreen();
-    resetTileIndex();
-
 #if 0
     VDP_PRINT_1(1,1, "image_Hangar_Background %0X",image_Hangar_Background.tileset->numTile*32);
     VDP_PRINT_1(1,2, "image_Hangar_Overlay    %0X",image_Hangar_Overlay.tileset->numTile*32);
@@ -353,6 +348,9 @@ void scene3()
 
     while(1);
 #endif
+
+    resetScreen();
+    resetTileIndex();
 
     const u16 indexHangarBackground = loadTileData(image_Hangar_Background.tileset);
     const u16 indexHangarOverlay    = loadTileData(image_Hangar_Overlay.tileset);
@@ -410,6 +408,60 @@ void scene3()
 
 void scene4()
 {
+#if 0
+    VDP_PRINT_1(1,1, "image_Title_Background %0X",image_Title_Background.tileset->numTile*32);
+    VDP_PRINT_1(1,2, "image_Title_Overlay    %0X",image_Title_Overlay.tileset->numTile*32);
+
+    u16 sum = image_Title_Background.tileset->numTile*32
+            + image_Title_Overlay.tileset->numTile*32;
+
+    VDP_PRINT_1(1, 4, "BG sum: %0X", sum);
+
+    VDP_PRINT_1(1, 6, "sprite_Title_Sprites_0  %0X", 32*sprite_Title_Sprites_0.animations[0]->frames[0]->tileset->numTile);
+    VDP_PRINT_1(1, 7, "sprite_Title_Sprites_1  %0X", 32*sprite_Title_Sprites_1.animations[0]->frames[0]->tileset->numTile);
+    VDP_PRINT_1(1, 8, "sprite_Title_Sprites_2  %0X", 32*sprite_Title_Sprites_2.animations[0]->frames[0]->tileset->numTile);
+    VDP_PRINT_1(1, 9, "sprite_Title_Sprites_3  %0X", 32*sprite_Title_Sprites_3.animations[0]->frames[0]->tileset->numTile);
+    VDP_PRINT_1(1,10, "sprite_Title_Sprites_4  %0X", 32*sprite_Title_Sprites_4.animations[0]->frames[0]->tileset->numTile);
+    VDP_PRINT_1(1,11, "sprite_Title_Sprites_5  %0X", 32*sprite_Title_Sprites_5.animations[0]->frames[0]->tileset->numTile);
+    VDP_PRINT_1(1,12, "sprite_Title_Sprites_6  %0X", 32*sprite_Title_Sprites_6.animations[0]->frames[0]->tileset->numTile);
+    VDP_PRINT_1(1,13, "sprite_Title_Sprites_7  %0X", 32*sprite_Title_Sprites_7.animations[0]->frames[0]->tileset->numTile);
+    VDP_PRINT_1(1,14, "sprite_Title_Sprites_8  %0X", 32*sprite_Title_Sprites_8.animations[0]->frames[0]->tileset->numTile);
+    VDP_PRINT_1(1,15, "sprite_Title_Sprites_9  %0X", 32*sprite_Title_Sprites_9.animations[0]->frames[0]->tileset->numTile);
+    VDP_PRINT_1(1,16, "sprite_Title_Sprites_10 %0X", 32*sprite_Title_Sprites_10.animations[0]->frames[0]->tileset->numTile);
+    VDP_PRINT_1(1,17, "sprite_Title_Sprites_11 %0X", 32*sprite_Title_Sprites_11.animations[0]->frames[0]->tileset->numTile);
+    VDP_PRINT_1(1,18, "sprite_Title_Sprites_12 %0X", 32*sprite_Title_Sprites_12.animations[0]->frames[0]->tileset->numTile);
+    VDP_PRINT_1(1,19, "sprite_Title_Sprites_13 %0X", 32*sprite_Title_Sprites_13.animations[0]->frames[0]->tileset->numTile);
+    VDP_PRINT_1(1,20, "sprite_Title_Sprites_14 %0X", 32*sprite_Title_Sprites_14.animations[0]->frames[0]->tileset->numTile);
+    VDP_PRINT_1(1,21, "sprite_Title_Sprites_15 %0X", 32*sprite_Title_Sprites_15.animations[0]->frames[0]->tileset->numTile);
+    VDP_PRINT_1(1,22, "sprite_Title_Sprites_16 %0X", 32*sprite_Title_Sprites_16.animations[0]->frames[0]->tileset->numTile);
+    VDP_PRINT_1(1,23, "sprite_Title_Sprites_17 %0X", 32*sprite_Title_Sprites_17.animations[0]->frames[0]->tileset->numTile);
+    VDP_PRINT_1(1,24, "sprite_Title_Sprites_18 %0X", 32*sprite_Title_Sprites_18.animations[0]->frames[0]->tileset->numTile);
+
+    sum += 32*sprite_Title_Sprites_0.animations[0]->frames[0]->tileset->numTile;
+    sum += 32*sprite_Title_Sprites_1.animations[0]->frames[0]->tileset->numTile;
+    sum += 32*sprite_Title_Sprites_2.animations[0]->frames[0]->tileset->numTile;
+    sum += 32*sprite_Title_Sprites_3.animations[0]->frames[0]->tileset->numTile;
+    sum += 32*sprite_Title_Sprites_4.animations[0]->frames[0]->tileset->numTile;
+    sum += 32*sprite_Title_Sprites_5.animations[0]->frames[0]->tileset->numTile;
+    sum += 32*sprite_Title_Sprites_6.animations[0]->frames[0]->tileset->numTile;
+    sum += 32*sprite_Title_Sprites_7.animations[0]->frames[0]->tileset->numTile;
+    sum += 32*sprite_Title_Sprites_8.animations[0]->frames[0]->tileset->numTile;
+    sum += 32*sprite_Title_Sprites_9.animations[0]->frames[0]->tileset->numTile;
+    sum += 32*sprite_Title_Sprites_10.animations[0]->frames[0]->tileset->numTile;
+    sum += 32*sprite_Title_Sprites_11.animations[0]->frames[0]->tileset->numTile;
+    sum += 32*sprite_Title_Sprites_12.animations[0]->frames[0]->tileset->numTile;
+    sum += 32*sprite_Title_Sprites_13.animations[0]->frames[0]->tileset->numTile;
+    sum += 32*sprite_Title_Sprites_14.animations[0]->frames[0]->tileset->numTile;
+    sum += 32*sprite_Title_Sprites_15.animations[0]->frames[0]->tileset->numTile;
+    sum += 32*sprite_Title_Sprites_16.animations[0]->frames[0]->tileset->numTile;
+    sum += 32*sprite_Title_Sprites_17.animations[0]->frames[0]->tileset->numTile;
+    sum += 32*sprite_Title_Sprites_18.animations[0]->frames[0]->tileset->numTile;
+
+    VDP_PRINT_1(1, 26, "Total sum: %0X", sum);
+
+    while(1);
+#endif
+
     resetScreen();
     resetTileIndex();
 
@@ -472,7 +524,6 @@ void scene4()
         VDP_waitVSync();
         VDP_setMapEx(BG_A, image_Title_Overlay.tilemap, TILE_ATTR_FULL(PAL3, TRUE, FALSE, FALSE, indexTitleOverlay), 6, 1, 0, 0, 28, 5);
     }
-
 }
 
 int main()
