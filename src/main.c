@@ -30,8 +30,6 @@
 #define TITLE_HSCROLL_TABLE_ADDR 0xF800
 #define TITLE_SPRITE_LIST_ADDR   0xFC00
 
-#define TILE_STARTINDEX          TILE_USERINDEX
-
 // *****************************************************************************
 //
 //  Data
@@ -118,7 +116,7 @@ u16 loadTileData(TileSet* tileSet)
 {
     const u16 startIndex = g_tileIndex;
 
-    VDP_loadTileData(tileSet->tiles, startIndex, tileSet->numTile, DMA);
+    VDP_loadTileData(tileSet->tiles, startIndex, tileSet->numTile, CPU);
     g_tileIndex += tileSet->numTile;
 
     return startIndex;
@@ -247,6 +245,27 @@ void scene1()
 
 void scene2()
 {
+#if 0
+    VDP_PRINT_1(1, 1, "image_Explosion_Background %0X", image_Explosion_Background.tileset->numTile*32);
+
+    u16 sum = image_Explosion_Background.tileset->numTile*32;
+
+    VDP_PRINT_1(1, 3, "BG sum: %0X", sum);
+
+    VDP_PRINT_1(1, 5, "sprite_Explosion_Sprites_0 %0X", sprite_Explosion_Sprites_0.maxNumTile*32);
+    VDP_PRINT_1(1, 6, "sprite_Explosion_Sprites_1 %0X", sprite_Explosion_Sprites_1.maxNumTile*32);
+
+    VDP_PRINT_1(1, 8, "image_Explosion_Overlay %0X", image_Explosion_Overlay.tileset->numTile*32);
+
+    sum += sprite_Explosion_Sprites_0.maxNumTile*32;
+    sum += sprite_Explosion_Sprites_1.maxNumTile*32;
+    sum += image_Explosion_Overlay.tileset->numTile*32;
+
+    VDP_PRINT_1(1, 10, "Total sum: %0X", sum);
+
+    while(1);
+#endif
+
     resetScreen();
     resetTileIndex();
 
@@ -309,7 +328,7 @@ void scene3()
     VDP_PRINT_1(1,1, "image_Hangar_Background %0X",image_Hangar_Background.tileset->numTile*32);
     VDP_PRINT_1(1,2, "image_Hangar_Overlay    %0X",image_Hangar_Overlay.tileset->numTile*32);
 
-    u16 sum = image_Hangar_Background.tileset->numTile*32;
+    u16 sum = image_Hangar_Background.tileset->numTile*32
             + image_Hangar_Overlay.tileset->numTile*32;
 
     VDP_PRINT_1(1, 4, "BG sum: %0X", sum);
@@ -344,6 +363,7 @@ void scene3()
         TILE_ATTR_FULL(PAL0, FALSE, FALSE, FALSE, indexHangarBackground),
         0, 0, 0, 0, image_Hangar_Background.tilemap->w, image_Hangar_Background.tilemap->h
     );
+
 
     SPR_reset();
 
