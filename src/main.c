@@ -79,6 +79,13 @@ void resetScreen()
 
 // -----------------------------------------------------------------------------
 
+void resetSprites()
+{
+    SPR_reset();
+}
+
+// -----------------------------------------------------------------------------
+
 Sprite* drawSprite(const SpriteDefinition* spriteDef, s16 x, s16 y, u16 attribute)
 {
     Sprite* sprite = SPR_addSprite(spriteDef, 0, 0, attribute);
@@ -167,14 +174,13 @@ void scene1()
 #endif
 
     resetScreen();
+    resetSprites();
     resetTileIndex();
 
     const u16 indexPlanetBackground0 = loadTileData(image_Planet_Background_0.tileset);
     const u16 indexPlanetBackground1 = loadTileData(image_Planet_Background_1.tileset);
     const u16 indexPlanetBackground2 = loadTileData(image_Planet_Background_2.tileset);
     const u16 indexPlanetOverlay     = loadTileData(image_Planet_Overlay.tileset);
-
-    SPR_reset();
 
     Sprite* spritePlanet = drawSprite(&sprite_Planet_Sprites, 320, 72, TILE_ATTR(PAL3, FALSE, FALSE, FALSE));
 
@@ -265,6 +271,7 @@ void scene2()
 #endif
 
     resetScreen();
+    resetSprites();
     resetTileIndex();
 
     const u16 indexExplosionBackground = loadTileData(image_Explosion_Background.tileset);
@@ -279,8 +286,6 @@ void scene2()
 
     const s16 yBackgroundOffset = IS_PALSYSTEM ? 0 : 16;
     VDP_setVerticalScroll(BG_B, yBackgroundOffset);
-
-    SPR_reset();
 
     const s16 ySpriteOffset = IS_PALSYSTEM ? 0 : -16;
     const u16 attribute = TILE_ATTR(PAL1, FALSE, FALSE, FALSE);
@@ -350,6 +355,7 @@ void scene3()
 #endif
 
     resetScreen();
+    resetSprites();
     resetTileIndex();
 
     const u16 indexHangarBackground = loadTileData(image_Hangar_Background.tileset);
@@ -361,9 +367,6 @@ void scene3()
         TILE_ATTR_FULL(PAL0, FALSE, FALSE, FALSE, indexHangarBackground),
         0, 0, 0, 0, image_Hangar_Background.tilemap->w, image_Hangar_Background.tilemap->h
     );
-
-
-    SPR_reset();
 
     const u16 attribute1 = TILE_ATTR(PAL1, FALSE, FALSE, FALSE);
     drawSprite(&sprite_Hangar_Sprites_0, 0,    28, attribute1);
@@ -463,6 +466,7 @@ void scene4()
 #endif
 
     resetScreen();
+    resetSprites();
     resetTileIndex();
 
     const u16 indexTitleBackground = loadTileData(image_Title_Background.tileset);
@@ -477,8 +481,6 @@ void scene4()
     
     const s16 yBackgroundOffset = IS_PALSYSTEM ? 0 : 16;
     VDP_setVerticalScroll(BG_B, yBackgroundOffset);
-
-    SPR_reset();
 
     const s16 ySpriteOffset = IS_PALSYSTEM ? 0: -16;
 
