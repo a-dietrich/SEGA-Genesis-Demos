@@ -41,5 +41,6 @@ extern const Image image_Hangar_Background;
 extern const Image image_Hangar_Overlay;
 extern const Image image_Title_Background;
 extern const Image image_Title_Overlay;
+extern const Image image_Title_ThunderForce;
 
 #endif // _RES_RESOURCES_H_

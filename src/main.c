@@ -44,6 +44,52 @@ static const u16 palette_white[64] =
     0xEEE, 0xEEE, 0xEEE, 0xEEE, 0xEEE, 0xEEE, 0xEEE, 0xEEE, 0xEEE, 0xEEE, 0xEEE, 0xEEE, 0xEEE, 0xEEE, 0xEEE, 0xEEE
 };
 
+static const u16 palette_title[256+50] =
+{
+ // 0xC00, 0xC00, 0xC00, 0xC00, 0xC00, 0xC00, 0xC00, 0xC00, 0xC00,
+                                                                   0xC00, 0xC00, 0xC00, 0xC00, 0xC00, 0xC00, 0xC00,
+    0xC00, 0xC00, 0xC00, 0xC00, 0xC00, 0xC00, 0xC00, 0xC00, 0xC00, 0xC00, 0xC00, 0xC00, 0xC00, 0xC00, 0xC00, 0xE00,
+    0xE00, 0xE20, 0xE40, 0xE60, 0xE80, 0xEA0, 0xEC0, 0xEE0, 0xEE2, 0xEE4, 0xEE6, 0xEE8, 0xEEA, 0xEEC, 0xEEE, 0xEEE,
+    0xEEE, 0xEEE, 0xEEE, 0x200, 0x400, 0x600, 0x800, 0xA00, 0xC00, 0xE00, 0xE00, 0xE20, 0xE40, 0xE60, 0xE80, 0xEA0,
+
+    0xEC0, 0xEE0, 0xEE2, 0xEE4, 0xEE6, 0xEE8, 0xEEA, 0xEEC, 0xEEE, 0xEEE, 0xEEE, 0xEEE, 0xEEE, 0xEEE, 0xEEE, 0xEEE,
+
+    0xEEE, 0xEEE, 0xEEE,
+
+    0xEEE, 0xC00, 0xC00, 0xC00, 0xC00, 0xC00, 0xC00, 0xC00, 0xC00, 0xC00, 0xC00, 0xC00, 0xC00, 0xC00, 0xC00, 0xE00,
+    0xE00, 0xE20, 0xE40, 0xE60, 0xE80, 0xEA0, 0xEC0, 0xEE0, 0xEE2, 0xEE4, 0xEE6, 0xEE8, 0xEEA, 0xEEC, 0xEEE, 0xEEE,
+    0xEEE, 0xEEE, 0xEEE, 0x200, 0x400, 0x600, 0x800, 0xA00, 0xC00, 0xE00, 0xE00, 0xE20, 0xE40, 0xE60, 0xE80, 0xEA0,
+    0xEC0, 0xEE0, 0xEE2, 0xEE4, 0xEE6, 0xEE8, 0xEEA, 0xEEC, 0xEEE, 0xEEE, 0xEEE, 0xEEE, 0xEEE, 0xEEE, 0xEEE, 0xEEE,
+
+    0xEEE, 0xEEE, 0xEEE, 0xEEE, 0xEEE, 0xEEE, 0xEEE, 0xEEE, 0xEEE, 0xEEE, 0x00C, 0x00C, 0x00C, 0x00C, 
+
+    0x00C, 0x00C, 0x00C, 0x00C, 0x00C,
+
+    0x00E, 0x00E,
+    0x22E, 0x44E, 0x66E, 0x88E, 0xAAE, 0xCCE, 0xEEE, 0xEEE, 0xEEE, 0xEEE, 0xEEE, 0xEEE, 0xEEE, 0x002, 0x004, 0x006,
+    0x008, 0x00A, 0x00E, 0x00E, 0x22E, 0x44E, 0x66E, 0x88E, 0xAAE, 0xCCE, 0xEEE, 0xEEE, 0xEEE, 0xEEE,
+
+    0xEEE, 0xEEE, 0xEEE, 0xEEE, 0xEEE, 0xEEE, 
+
+    0xEEE, 0xEEE, 0xEEE, 0xEEE, 0xEEE, 0xEEE, 0xEEE, 0xEEE, 0xEEE,
+
+    //
+
+    0xCCC, 0xAAA, 0x888, 0x666, 0xE40, 0xE80, 0xEE0, 0xEEE, 0xCCC, 0xAAA, 0x888, 0x666, 0xE40, 0xE80, 0xEE0, 0xEEE,
+
+    0xEEE, 0xEEE, 0xEEE, 0xEEE, 0xEEE, 0xEEE, 0xEEE, 0xEEE, 0xEEE, 0xEEE, 0xEEE, 0xEEE, 0xEEE, 0xEEE, 0xEEE, 0xEEE,
+    0xEEE, 0xEEE, 0xEEE, 0xEEE, 0xEEE, 0xEEE, 0xEEE, 0xEEE, 0xEEE, 0xEEE, 0xEEE, 0xEEE, 0xEEE, 0xEEE, 0xEEE, 0xEEE,
+    0xEEE, 0xEEE,
+
+    ///
+
+    0x0C0, 0x0A0, 0x080, 0x060, 0x440, 0x480, 0x4E0, 0x4EE, 0xCCC, 0xAAA, 0x888, 0x666, 0xE40, 0xE80, 0xEE0, 0xEEE,
+
+    0xEEE, 0xEEE, 0xEEE, 0xEEE, 0xEEE, 0xEEE, 0xEEE, 0xEEE, 0xEEE, 0xEEE, 0xEEE, 0xEEE, 0xEEE, 0xEEE, 0xEEE, 0xEEE,
+    0xEEE, 0xEEE, 0xEEE, 0xEEE, 0xEEE, 0xEEE, 0xEEE, 0xEEE, 0xEEE, 0xEEE, 0xEEE, 0xEEE, 0xEEE, 0xEEE, 0xEEE, 0xEEE,
+    0xEEE, 0xEEE
+};
+
 // *****************************************************************************
 //
 //  Global variables
@@ -148,7 +194,6 @@ void fadePalettes(const u16* pal0, const u16* pal1, const u16* pal2, const u16* 
 //
 // *****************************************************************************
 
-
 void scene1()
 {
 #if 0
@@ -186,7 +231,7 @@ void scene1()
 
     SPR_update();
 
-    VDP_waitVSync();
+    SYS_doVBlankProcess();
     VDP_setPaletteColors( 0, image_Planet_Background_0.palette->data, 16);
     VDP_setPaletteColors(16, image_Planet_Background_1.palette->data, 16);
     VDP_setPaletteColors(32, image_Planet_Background_2.palette->data, 16);
@@ -412,33 +457,35 @@ void scene3()
 void scene4()
 {
 #if 0
-    VDP_PRINT_1(1,1, "image_Title_Background %0X",image_Title_Background.tileset->numTile*32);
-    VDP_PRINT_1(1,2, "image_Title_Overlay    %0X",image_Title_Overlay.tileset->numTile*32);
+    VDP_PRINT_1(1,1, "image_Title_Background   %0X",image_Title_Background.tileset->numTile*32);
+    VDP_PRINT_1(1,2, "image_Title_Overlay      %0X",image_Title_Overlay.tileset->numTile*32);
+    VDP_PRINT_1(1,3, "image_Title_ThunderForce %0X",image_Title_ThunderForce.tileset->numTile*32);
 
     u16 sum = image_Title_Background.tileset->numTile*32
-            + image_Title_Overlay.tileset->numTile*32;
+            + image_Title_Overlay.tileset->numTile*32
+            + image_Title_ThunderForce.tileset->numTile*32;
 
-    VDP_PRINT_1(1, 4, "BG sum: %0X", sum);
+    VDP_PRINT_1(1, 5, "BG sum: %0X", sum);
 
-    VDP_PRINT_1(1, 6, "sprite_Title_Sprites_0  %0X", 32*sprite_Title_Sprites_0.animations[0]->frames[0]->tileset->numTile);
-    VDP_PRINT_1(1, 7, "sprite_Title_Sprites_1  %0X", 32*sprite_Title_Sprites_1.animations[0]->frames[0]->tileset->numTile);
-    VDP_PRINT_1(1, 8, "sprite_Title_Sprites_2  %0X", 32*sprite_Title_Sprites_2.animations[0]->frames[0]->tileset->numTile);
-    VDP_PRINT_1(1, 9, "sprite_Title_Sprites_3  %0X", 32*sprite_Title_Sprites_3.animations[0]->frames[0]->tileset->numTile);
-    VDP_PRINT_1(1,10, "sprite_Title_Sprites_4  %0X", 32*sprite_Title_Sprites_4.animations[0]->frames[0]->tileset->numTile);
-    VDP_PRINT_1(1,11, "sprite_Title_Sprites_5  %0X", 32*sprite_Title_Sprites_5.animations[0]->frames[0]->tileset->numTile);
-    VDP_PRINT_1(1,12, "sprite_Title_Sprites_6  %0X", 32*sprite_Title_Sprites_6.animations[0]->frames[0]->tileset->numTile);
-    VDP_PRINT_1(1,13, "sprite_Title_Sprites_7  %0X", 32*sprite_Title_Sprites_7.animations[0]->frames[0]->tileset->numTile);
-    VDP_PRINT_1(1,14, "sprite_Title_Sprites_8  %0X", 32*sprite_Title_Sprites_8.animations[0]->frames[0]->tileset->numTile);
-    VDP_PRINT_1(1,15, "sprite_Title_Sprites_9  %0X", 32*sprite_Title_Sprites_9.animations[0]->frames[0]->tileset->numTile);
-    VDP_PRINT_1(1,16, "sprite_Title_Sprites_10 %0X", 32*sprite_Title_Sprites_10.animations[0]->frames[0]->tileset->numTile);
-    VDP_PRINT_1(1,17, "sprite_Title_Sprites_11 %0X", 32*sprite_Title_Sprites_11.animations[0]->frames[0]->tileset->numTile);
-    VDP_PRINT_1(1,18, "sprite_Title_Sprites_12 %0X", 32*sprite_Title_Sprites_12.animations[0]->frames[0]->tileset->numTile);
-    VDP_PRINT_1(1,19, "sprite_Title_Sprites_13 %0X", 32*sprite_Title_Sprites_13.animations[0]->frames[0]->tileset->numTile);
-    VDP_PRINT_1(1,20, "sprite_Title_Sprites_14 %0X", 32*sprite_Title_Sprites_14.animations[0]->frames[0]->tileset->numTile);
-    VDP_PRINT_1(1,21, "sprite_Title_Sprites_15 %0X", 32*sprite_Title_Sprites_15.animations[0]->frames[0]->tileset->numTile);
-    VDP_PRINT_1(1,22, "sprite_Title_Sprites_16 %0X", 32*sprite_Title_Sprites_16.animations[0]->frames[0]->tileset->numTile);
-    VDP_PRINT_1(1,23, "sprite_Title_Sprites_17 %0X", 32*sprite_Title_Sprites_17.animations[0]->frames[0]->tileset->numTile);
-    VDP_PRINT_1(1,24, "sprite_Title_Sprites_18 %0X", 32*sprite_Title_Sprites_18.animations[0]->frames[0]->tileset->numTile);
+    VDP_PRINT_1(1, 7, "sprite_Title_Sprites_0  %0X", 32*sprite_Title_Sprites_0.animations[0]->frames[0]->tileset->numTile);
+    VDP_PRINT_1(1, 8, "sprite_Title_Sprites_1  %0X", 32*sprite_Title_Sprites_1.animations[0]->frames[0]->tileset->numTile);
+    VDP_PRINT_1(1, 9, "sprite_Title_Sprites_2  %0X", 32*sprite_Title_Sprites_2.animations[0]->frames[0]->tileset->numTile);
+    VDP_PRINT_1(1,10, "sprite_Title_Sprites_3  %0X", 32*sprite_Title_Sprites_3.animations[0]->frames[0]->tileset->numTile);
+    VDP_PRINT_1(1,11, "sprite_Title_Sprites_4  %0X", 32*sprite_Title_Sprites_4.animations[0]->frames[0]->tileset->numTile);
+    VDP_PRINT_1(1,12, "sprite_Title_Sprites_5  %0X", 32*sprite_Title_Sprites_5.animations[0]->frames[0]->tileset->numTile);
+    VDP_PRINT_1(1,13, "sprite_Title_Sprites_6  %0X", 32*sprite_Title_Sprites_6.animations[0]->frames[0]->tileset->numTile);
+    VDP_PRINT_1(1,14, "sprite_Title_Sprites_7  %0X", 32*sprite_Title_Sprites_7.animations[0]->frames[0]->tileset->numTile);
+    VDP_PRINT_1(1,15, "sprite_Title_Sprites_8  %0X", 32*sprite_Title_Sprites_8.animations[0]->frames[0]->tileset->numTile);
+    VDP_PRINT_1(1,16, "sprite_Title_Sprites_9  %0X", 32*sprite_Title_Sprites_9.animations[0]->frames[0]->tileset->numTile);
+    VDP_PRINT_1(1,17, "sprite_Title_Sprites_10 %0X", 32*sprite_Title_Sprites_10.animations[0]->frames[0]->tileset->numTile);
+    VDP_PRINT_1(1,18, "sprite_Title_Sprites_11 %0X", 32*sprite_Title_Sprites_11.animations[0]->frames[0]->tileset->numTile);
+    VDP_PRINT_1(1,19, "sprite_Title_Sprites_12 %0X", 32*sprite_Title_Sprites_12.animations[0]->frames[0]->tileset->numTile);
+    VDP_PRINT_1(1,20, "sprite_Title_Sprites_13 %0X", 32*sprite_Title_Sprites_13.animations[0]->frames[0]->tileset->numTile);
+    VDP_PRINT_1(1,21, "sprite_Title_Sprites_14 %0X", 32*sprite_Title_Sprites_14.animations[0]->frames[0]->tileset->numTile);
+    VDP_PRINT_1(1,22, "sprite_Title_Sprites_15 %0X", 32*sprite_Title_Sprites_15.animations[0]->frames[0]->tileset->numTile);
+    VDP_PRINT_1(1,23, "sprite_Title_Sprites_16 %0X", 32*sprite_Title_Sprites_16.animations[0]->frames[0]->tileset->numTile);
+    VDP_PRINT_1(1,24, "sprite_Title_Sprites_17 %0X", 32*sprite_Title_Sprites_17.animations[0]->frames[0]->tileset->numTile);
+    VDP_PRINT_1(1,25, "sprite_Title_Sprites_18 %0X", 32*sprite_Title_Sprites_18.animations[0]->frames[0]->tileset->numTile);
 
     sum += 32*sprite_Title_Sprites_0.animations[0]->frames[0]->tileset->numTile;
     sum += 32*sprite_Title_Sprites_1.animations[0]->frames[0]->tileset->numTile;
@@ -460,17 +507,89 @@ void scene4()
     sum += 32*sprite_Title_Sprites_17.animations[0]->frames[0]->tileset->numTile;
     sum += 32*sprite_Title_Sprites_18.animations[0]->frames[0]->tileset->numTile;
 
-    VDP_PRINT_1(1, 26, "Total sum: %0X", sum);
+    VDP_PRINT_1(1, 27, "Total sum: %0X", sum);
 
     while(1);
 #endif
+    // -------------------------------------------------------------------------
+    //  Interrupt handlers
+    // -------------------------------------------------------------------------
+
+    static s16 lineDisplay = 0;
+ 
+    static u16 vScroll = 0;
+    static u16 tmpIndex = 0;
+
+    static fix32 vintTimeEnd;
+
+    void HIntHandler()
+    {
+        const u16 color = palette_title[lineDisplay++ & 0xFF];
+
+        while (GET_HCOUNTER < 154)
+        {}
+
+        *((vu32*) GFX_CTRL_PORT) = GFX_WRITE_CRAM_ADDR((u32)(63*2));
+        *((vu16*) GFX_DATA_PORT) = color;
+    }
+    
+    void VIntHandler()
+    {
+        lineDisplay = 256-8*4-vScroll;
+
+        VDP_setVerticalScroll(BG_A, -vScroll);
+
+        const s16 vScrollEnd = IS_PALSYSTEM ? 240-8 : 224;
+        if (vScroll >= vScrollEnd)
+        {
+            if (getTimeAsFix32(1) > vintTimeEnd)
+            {
+                VDP_clearPlane(BG_A, TRUE);
+                VDP_setHInterrupt(0);
+            }
+            else
+            {
+                VDP_setMapEx(
+                    BG_A,
+                    image_Title_ThunderForce.tilemap,
+                    TILE_ATTR_FULL(PAL3, TRUE, FALSE, FALSE, tmpIndex),
+                    8, (32-1)-2, 0, (image_Title_ThunderForce.tilemap->h-1)-2,
+                    image_Title_ThunderForce.tilemap->w, 3
+                );
+            }
+
+            return;
+        }
+
+        const u16 yTile = vScroll >> 3;
+        const s16 ys = (image_Title_ThunderForce.tilemap->h-1) - yTile;
+        const s16 yd = (32-1) - yTile;
+
+        vScroll += 8;
+
+        if ((ys < 0) || (yd > 32-1-3))
+            return;
+
+        VDP_setMapEx(
+            BG_A,
+            image_Title_ThunderForce.tilemap,
+            TILE_ATTR_FULL(PAL3, TRUE, FALSE, FALSE, tmpIndex),
+            8, yd, 0, ys,
+            image_Title_ThunderForce.tilemap->w, 1
+        );
+    }
+
+    // -------------------------------------------------------------------------
+    //  Main thread
+    // -------------------------------------------------------------------------
 
     resetScreen();
     resetSprites();
     resetTileIndex();
 
-    const u16 indexTitleBackground = loadTileData(image_Title_Background.tileset);
-    const u16 indexTitleOverlay    = loadTileData(image_Title_Overlay.tileset);
+    const u16 indexTitleBackground   = loadTileData(image_Title_Background.tileset);
+    const u16 indexTitleOverlay      = loadTileData(image_Title_Overlay.tileset);
+    const u16 indexTitleThunderForce = loadTileData(image_Title_ThunderForce.tileset);
 
     VDP_setMapEx(
         BG_B,
@@ -515,7 +634,7 @@ void scene4()
         image_Title_Background.palette->data,
         sprite_Title_Sprites_0.palette->data,
         sprite_Title_Sprites_9.palette->data,
-        sprite_Title_Sprites_17.palette->data,
+        image_Title_ThunderForce.palette->data,
         48,
         FALSE
     );
@@ -526,21 +645,50 @@ void scene4()
         VDP_waitVSync();
         VDP_setMapEx(BG_A, image_Title_Overlay.tilemap, TILE_ATTR_FULL(PAL3, TRUE, FALSE, FALSE, indexTitleOverlay), 6, 1, 0, 0, 28, 5);
     }
+
+    waitMs(2000);
+    {
+        VDP_waitVSync();
+        VDP_clearPlane(BG_A, TRUE);
+    }
+
+    vScroll = 0;
+    tmpIndex = indexTitleThunderForce;
+
+    vintTimeEnd = getTimeAsFix32(1) + FIX32(12);
+
+    // Setup interrupt handlers
+    SYS_disableInts();
+    {
+        VDP_setHIntCounter(0);
+        VDP_setHInterrupt(1);
+        SYS_setHIntCallback(HIntHandler);
+        SYS_setVIntCallback(VIntHandler);
+    }
+    SYS_enableInts();
+
+    while (getTimeAsFix32(1) < vintTimeEnd)
+        SYS_doVBlankProcess();
+    
+    waitMs(500);
+    {
+        PAL_fadeToAll(palette_black, 32, FALSE);
+    }
+
+    SYS_disableInts();
+    {
+        VDP_setHInterrupt(0);
+        SYS_setHIntCallback(0);
+        SYS_setVIntCallback(0);
+    }
+    SYS_enableInts();
+
+    // Exit
+    waitMs(500);
 }
 
 int main()
 {
-    // -------------------------------------------------------------------------
-    //  Interrupt handlers
-    // -------------------------------------------------------------------------
-
-    void HIntHandler()
-    {
-    }
-    void VIntHandler()
-    {
-    }
-
     // -------------------------------------------------------------------------
     //  Main thread
     // -------------------------------------------------------------------------
@@ -565,10 +713,13 @@ int main()
 
     PAL_setColors(0, palette_black, 64);
 
-    // XGM_startPlay(xgm_01);
+    while (TRUE)
+    {
+        XGM_startPlay(xgm_01);
 
-    scene1();    
-    scene2();
-    scene3();
-    scene4();
+        scene1();    
+        scene2();
+        scene3();
+        scene4();
+    }
 }

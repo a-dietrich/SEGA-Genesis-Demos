@@ -10,9 +10,7 @@
             },
             "includePath": [
                 "${workspaceFolder}/**",
-                "${workspaceFolder}/../../Tools/SGDK/inc",
-                "${workspaceFolder}/../../Tools/SGDK/res",
-                "~/Development/Genesis/Tools/SGDK/inc"
+                "/Users/andreas/Development/Genesis/Tools/SGDK/inc"
             ],
             "defines": [],
             "macFrameworkPath": [
