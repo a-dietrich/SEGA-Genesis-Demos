@@ -40,8 +40,8 @@ SPRITE sprite_Hangar_Sprites_6    "gfx/Hangar_Sprites_6.png"     15  7 NONE 0 NO
 //
 
 IMAGE  image_Title_Background     "gfx/Title_Background.png"     NONE DUPLICATE
-IMAGE  image_Title_Overlay        "gfx/Title_Overlay_3.png"        NONE DUPLICATE
-IMAGE  image_Title_ThunderForce   "gfx/Title_ThunderForce_5.png"   NONE DUPLICATE
+IMAGE  image_Title_Overlay        "gfx/Title_Overlay.png"        NONE DUPLICATE
+IMAGE  image_Title_ThunderForce   "gfx/Title_ThunderForce.png"   NONE DUPLICATE
 
 SPRITE sprite_Title_Sprites_0     "gfx/Title_Sprites_0.png"      13 15 NONE 0 NONE TILE
 SPRITE sprite_Title_Sprites_1     "gfx/Title_Sprites_1.png"       9  9 NONE 0 NONE TILE
