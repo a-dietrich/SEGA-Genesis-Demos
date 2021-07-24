@@ -20,7 +20,6 @@ out/res/resources.o: res/resources.res \
 /Users/andreas/Development/Genesis/Projects/SEGAGenesis-Demos/tf2/res/gfx/Hangar_Background.png \
 /Users/andreas/Development/Genesis/Projects/SEGAGenesis-Demos/tf2/res/gfx/Title_Sprites_14.png \
 /Users/andreas/Development/Genesis/Projects/SEGAGenesis-Demos/tf2/res/gfx/Title_Sprites_4.png \
-/Users/andreas/Development/Genesis/Projects/SEGAGenesis-Demos/tf2/res/gfx/Title_Overlay_3.png \
 /Users/andreas/Development/Genesis/Projects/SEGAGenesis-Demos/tf2/res/gfx/Title_Sprites_10.png \
 /Users/andreas/Development/Genesis/Projects/SEGAGenesis-Demos/tf2/res/gfx/Hangar_Sprites_4.png \
 /Users/andreas/Development/Genesis/Projects/SEGAGenesis-Demos/tf2/res/gfx/Title_Sprites_0.png \
@@ -32,6 +31,7 @@ out/res/resources.o: res/resources.res \
 /Users/andreas/Development/Genesis/Projects/SEGAGenesis-Demos/tf2/res/gfx/Title_ThunderForce.png \
 /Users/andreas/Development/Genesis/Projects/SEGAGenesis-Demos/tf2/res/gfx/Hangar_Sprites_3.png \
 /Users/andreas/Development/Genesis/Projects/SEGAGenesis-Demos/tf2/res/gfx/Title_Sprites_15.png \
+/Users/andreas/Development/Genesis/Projects/SEGAGenesis-Demos/tf2/res/gfx/Title_Overlay.png \
 /Users/andreas/Development/Genesis/Projects/SEGAGenesis-Demos/tf2/res/gfx/Title_Sprites_6.png \
 /Users/andreas/Development/Genesis/Projects/SEGAGenesis-Demos/tf2/res/gfx/Title_Sprites_17.png \
 /Users/andreas/Development/Genesis/Projects/SEGAGenesis-Demos/tf2/res/gfx/Hangar_Sprites_2.png \
