@@ -1,5 +1,11 @@
 
 //
+// Scene 0 -- Tecnosoft
+//
+
+IMAGE  image_Tecnosoft_Background "gfx/Tecnosoft_Background.png" NONE DUPLICATE
+
+// 
 // Scene 1 -- Planet
 //
 
@@ -68,3 +74,11 @@ SPRITE sprite_Title_Sprites_18    "gfx/Title_Sprites_18.png"      2  3 NONE 0 NO
 //
 
 XGM xgm_01 "music/01_-_The_Wind_Blew_All_Day_Long_(OpeningTheme).vgm"
+
+//
+// Sound
+//
+
+WAV wav_01 "sound/copyright.wav"    XGM
+WAV wav_02 "sound/sorry.wav"        XGM
+WAV wav_03 "sound/thunderforce.wav" XGM

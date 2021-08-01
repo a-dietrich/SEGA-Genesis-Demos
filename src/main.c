@@ -102,6 +102,7 @@ void resetScreen()
 void resetSprites()
 {
     SPR_reset();
+    SPR_update();
 }
 
 // -----------------------------------------------------------------------------
@@ -168,6 +169,53 @@ void fadePalettes(const u16* pal0, const u16* pal1, const u16* pal2, const u16* 
 //
 // *****************************************************************************
 
+void scene0()
+{
+    resetScreen();
+    resetSprites();
+    resetTileIndex();
+
+    const u16 indexTecnosoftBackground = loadTileData(image_Tecnosoft_Background.tileset);
+
+    VDP_setMapEx(
+        BG_B,
+        image_Tecnosoft_Background.tilemap,
+        TILE_ATTR_FULL(PAL0, FALSE, FALSE, FALSE, indexTecnosoftBackground),
+        0, 0, 0, 0, image_Tecnosoft_Background.tilemap->w, image_Tecnosoft_Background.tilemap->h
+    );
+
+    const s16 yBackgroundOffset = IS_PALSYSTEM ? 0 : 8;
+    VDP_setVerticalScroll(BG_B, yBackgroundOffset);
+
+    fadePalettes(
+        image_Tecnosoft_Background.palette->data,
+        NULL,
+        NULL,
+        NULL,
+        16,
+        FALSE
+    );
+
+    waitMs(250);
+    {
+        PAL_setColor(1, 0x080);
+    }
+
+    XGM_startPlayPCM(64, 1, SOUND_PCM_CH2);
+    do
+    {
+        SYS_doVBlankProcess();
+    }
+    while (XGM_isPlayingPCM(SOUND_PCM_CH2_MSK));
+    XGM_stopPlayPCM(SOUND_PCM_CH2);
+
+    // Fade to black
+    waitMs(1000);
+    {
+        PAL_fadeToAll(palette_black, 16, FALSE);
+    }
+}
+
 void scene1()
 {
 #if 0
@@ -210,6 +258,18 @@ void scene1()
     VDP_setPaletteColors(16, image_Planet_Background_1.palette->data, 16);
     VDP_setPaletteColors(32, image_Planet_Background_2.palette->data, 16);
     VDP_setPaletteColors(48, sprite_Planet_Sprites.palette->data,     16);
+
+#if 0
+    SND_startPlay_PCM(wav_02, sizeof(wav_02), SOUND_RATE_32000, SOUND_PAN_CENTER, 0);
+    do
+    {
+        SYS_doVBlankProcess();
+    }
+    while (SND_isPlaying_PCM());
+    SND_stopPlay_PCM();
+#endif
+
+    XGM_startPlayPCM(65, 1, SOUND_PCM_CH2);
 
     // Scroll background
     {
@@ -493,6 +553,8 @@ void scene4()
     static u16   vintVScroll;
     static u16   vintTileIndex;
     static fix32 vintTimeEnd;
+    static fix32 vintTimeSound;
+    static bool  vintSoundOn;
 
     // -------------------------------------------------------------------------
 
@@ -526,6 +588,11 @@ void scene4()
 
                 // Stop horizontal interrupt to free up for main thread
                 VDP_setHInterrupt(0);
+            }
+            else if (!vintSoundOn && getTimeAsFix32(1) > vintTimeSound)
+            {
+                XGM_startPlayPCM(66, 1, SOUND_PCM_CH2);
+                vintSoundOn = TRUE;
             }
             // Else draw copyright message
             else
@@ -640,6 +707,8 @@ void scene4()
         vintVScroll   = 0;
         vintTileIndex = indexTitleThunderForce;
         vintTimeEnd   = getTimeAsFix32(1) + FIX32(12);
+        vintTimeSound = getTimeAsFix32(1) + FIX32(8);
+        vintSoundOn   = FALSE;
 
         VDP_setHIntCounter(0);
         VDP_setHInterrupt(1);
@@ -652,6 +721,8 @@ void scene4()
     while (getTimeAsFix32(1) < vintTimeEnd)
         SYS_doVBlankProcess();
     
+    XGM_stopPlay();
+
     // Fade out
     waitMs(500);
     {
@@ -695,10 +766,16 @@ int main()
 
     SPR_init();
 
-    PAL_setColors(0, palette_black, 64);
+    PAL_setColors(0, palette_black, 64, DMA);
+
+    XGM_setPCM(64, wav_01, sizeof(wav_01));
+    XGM_setPCM(65, wav_02, sizeof(wav_02));
+    XGM_setPCM(66, wav_03, sizeof(wav_03));
 
     while (TRUE)
     {
+        scene0();
+
         XGM_startPlay(xgm_01);
 
         scene1();    

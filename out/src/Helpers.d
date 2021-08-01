@@ -12,8 +12,8 @@ out/src/Helpers.o: src/Helpers.c src/Helpers.h \
  /Users/andreas/Development/Genesis/Tools/SGDK/inc/maths.h \
  /Users/andreas/Development/Genesis/Tools/SGDK/inc/vdp.h \
  /Users/andreas/Development/Genesis/Tools/SGDK/inc/pal.h \
- /Users/andreas/Development/Genesis/Tools/SGDK/inc/vdp_tile.h \
  /Users/andreas/Development/Genesis/Tools/SGDK/inc/dma.h \
+ /Users/andreas/Development/Genesis/Tools/SGDK/inc/vdp_tile.h \
  /Users/andreas/Development/Genesis/Tools/SGDK/inc/vdp_bg.h \
  /Users/andreas/Development/Genesis/Tools/SGDK/inc/map.h \
  /Users/andreas/Development/Genesis/Tools/SGDK/inc/font.h \

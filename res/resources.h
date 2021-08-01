@@ -1,6 +1,9 @@
 #ifndef _RES_RESOURCES_H_
 #define _RES_RESOURCES_H_
 
+extern const u8 wav_01[57088];
+extern const u8 wav_02[11008];
+extern const u8 wav_03[30464];
 extern const u8 xgm_01[17920];
 extern const SpriteDefinition sprite_Planet_Sprites;
 extern const SpriteDefinition sprite_Explosion_Sprites_0;
@@ -31,6 +34,7 @@ extern const SpriteDefinition sprite_Title_Sprites_15;
 extern const SpriteDefinition sprite_Title_Sprites_16;
 extern const SpriteDefinition sprite_Title_Sprites_17;
 extern const SpriteDefinition sprite_Title_Sprites_18;
+extern const Image image_Tecnosoft_Background;
 extern const Image image_Planet_Background_0;
 extern const Image image_Planet_Background_1;
 extern const Image image_Planet_Background_2;
