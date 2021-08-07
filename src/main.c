@@ -18,7 +18,8 @@
 // Resources
 #include "resources.h"
 
-#include "Helpers.h"
+// Debug helpers
+#include "debug.h"
 
 // -----------------------------------------------------------------------------
 //  Defines
@@ -29,6 +30,10 @@
 #define TITLE_WINDOW_ADDR        0xF000
 #define TITLE_HSCROLL_TABLE_ADDR 0xF800
 #define TITLE_SPRITE_LIST_ADDR   0xFC00
+
+#define WAV_COPYRIGHT            64
+#define WAV_SORRY                65
+#define WAV_THUNDERFORCE         66
 
 // *****************************************************************************
 //
@@ -77,15 +82,6 @@ u16 g_tileIndex = 0;
 //  Subroutines
 //
 // *****************************************************************************
-
-#define VDP_PRINT_1(x, y, fmt, arg0) \
-{                                    \
-    char buffer[128];                \
-    sprintf(buffer, fmt, arg0);      \
-    VDP_drawText(buffer, x, y);      \
-}
-
-// -----------------------------------------------------------------------------
 
 void resetScreen()
 {
@@ -163,14 +159,34 @@ void fadePalettes(const u16* pal0, const u16* pal1, const u16* pal2, const u16* 
     PAL_fadeToAll(palTemp, numFrames, async);
 }
 
+// -----------------------------------------------------------------------------
+
+void playPCM(u8 id)
+{
+    XGM_startPlayPCM(id, 1, SOUND_PCM_CH2);
+    do
+    { 
+        SYS_doVBlankProcess();
+    }
+    while (XGM_isPlayingPCM(SOUND_PCM_CH2_MSK));
+}
+
 // *****************************************************************************
 //
-//  Main
+//  Scenes
 //
 // *****************************************************************************
 
 void scene0()
 {
+    #if 0
+        debugInfoScene0();
+    #endif
+
+    // --------------
+    // Initialization
+    // --------------
+
     resetScreen();
     resetSprites();
     resetTileIndex();
@@ -187,33 +203,24 @@ void scene0()
     const s16 yBackgroundOffset = IS_PALSYSTEM ? 0 : 8;
     VDP_setVerticalScroll(BG_B, yBackgroundOffset);
 
-    fadePalettes(
-        image_Tecnosoft_Background.palette->data,
-        NULL,
-        NULL,
-        NULL,
-        16,
-        FALSE
-    );
+    // ------------
+    // Play scene 0
+    // ------------
 
-    waitMs(250);
-    {
-        PAL_setColor(1, 0x080);
-    }
+    // Fade in text
+    const u16 tecnosoftBackground[1] = { 0x0A0 };
+    PAL_fadeTo(2, 2, image_Tecnosoft_Background.palette->data+2, 16, FALSE); waitMs(125);
+    PAL_fadeTo(1, 1, image_Tecnosoft_Background.palette->data+1, 16, FALSE);
+    PAL_fadeTo(1, 1, tecnosoftBackground,                         4, FALSE);
 
-    XGM_startPlayPCM(64, 1, SOUND_PCM_CH2);
-    do
-    {
-        SYS_doVBlankProcess();
-    }
-    while (XGM_isPlayingPCM(SOUND_PCM_CH2_MSK));
-    XGM_stopPlayPCM(SOUND_PCM_CH2);
+    // Play sample
+    playPCM(WAV_COPYRIGHT);
 
     // Fade to black
-    waitMs(1000);
-    {
-        PAL_fadeToAll(palette_black, 16, FALSE);
-    }
+    PAL_fadeToAll(palette_black, 16, FALSE);
+
+    // Exit
+    waitMs(500);
 }
 
 void scene1()
@@ -259,17 +266,9 @@ void scene1()
     VDP_setPaletteColors(32, image_Planet_Background_2.palette->data, 16);
     VDP_setPaletteColors(48, sprite_Planet_Sprites.palette->data,     16);
 
-#if 0
-    SND_startPlay_PCM(wav_02, sizeof(wav_02), SOUND_RATE_32000, SOUND_PAN_CENTER, 0);
-    do
-    {
-        SYS_doVBlankProcess();
-    }
-    while (SND_isPlaying_PCM());
-    SND_stopPlay_PCM();
-#endif
+    XGM_startPlay(xgm_01);
 
-    XGM_startPlayPCM(65, 1, SOUND_PCM_CH2);
+    playPCM(WAV_SORRY);
 
     // Scroll background
     {
@@ -742,15 +741,17 @@ void scene4()
     waitMs(500);
 }
 
+// *****************************************************************************
+//
+//  Main
+//
+// *****************************************************************************
+
 int main()
 {
-    // -------------------------------------------------------------------------
-    //  Main thread
-    // -------------------------------------------------------------------------
-
-    //
+    // -------------
     // Initalization
-    //
+    // -------------
 
     // VDP memory layout
     VDP_setBGAAddress         ( TITLE_BGA_ADDR           );
@@ -764,20 +765,25 @@ int main()
     VDP_setPlanSize(64, 32);
     VDP_setScrollingMode(HSCROLL_PLANE, VSCROLL_PLANE);
 
+    // Init sprites
     SPR_init();
 
+    // Clear palettes
+    SYS_doVBlankProcess();
     PAL_setColors(0, palette_black, 64, DMA);
 
-    XGM_setPCM(64, wav_01, sizeof(wav_01));
-    XGM_setPCM(65, wav_02, sizeof(wav_02));
-    XGM_setPCM(66, wav_03, sizeof(wav_03));
+    // Register sound effects
+    XGM_setPCM(WAV_COPYRIGHT,    wav_Copyright,    sizeof(wav_Copyright));
+    XGM_setPCM(WAV_SORRY,        wav_Sorry,        sizeof(wav_Sorry));
+    XGM_setPCM(WAV_THUNDERFORCE, wav_ThunderForce, sizeof(wav_ThunderForce));
+
+    // ---------
+    // Main loop
+    // ---------
 
     while (TRUE)
     {
         scene0();
-
-        XGM_startPlay(xgm_01);
-
         scene1();    
         scene2();
         scene3();

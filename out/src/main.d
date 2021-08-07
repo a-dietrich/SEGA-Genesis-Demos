@@ -33,4 +33,4 @@ out/src/main.o: src/main.c \
  /Users/andreas/Development/Genesis/Tools/SGDK/inc/psg.h \
  /Users/andreas/Development/Genesis/Tools/SGDK/inc/joy.h \
  /Users/andreas/Development/Genesis/Tools/SGDK/inc/timer.h \
- res/resources.h src/Helpers.h
+ res/resources.h src/debug.h

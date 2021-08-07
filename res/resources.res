@@ -1,13 +1,13 @@
 
-//
+// -----------------------------------------------------------------------------
 // Scene 0 -- Tecnosoft
-//
+// -----------------------------------------------------------------------------
 
 IMAGE  image_Tecnosoft_Background "gfx/Tecnosoft_Background.png" NONE DUPLICATE
 
-// 
+// -----------------------------------------------------------------------------
 // Scene 1 -- Planet
-//
+// -----------------------------------------------------------------------------
 
 IMAGE  image_Planet_Background_0  "gfx/Planet_Background_0.png"  NONE DUPLICATE
 IMAGE  image_Planet_Background_1  "gfx/Planet_Background_1.png"  NONE DUPLICATE
@@ -16,9 +16,9 @@ IMAGE  image_Planet_Overlay       "gfx/Planet_Overlay.png"       NONE DUPLICATE
 
 SPRITE sprite_Planet_Sprites      "gfx/Planet_Sprites.png"       12 16 NONE 0 NONE TILE
 
-//
+// -----------------------------------------------------------------------------
 // Scene 2 -- Explosion
-//
+// -----------------------------------------------------------------------------
 
 IMAGE  image_Explosion_Background "gfx/Explosion_Background.png" NONE DUPLICATE
 IMAGE  image_Explosion_Overlay    "gfx/Explosion_Overlay.png"    NONE DUPLICATE
@@ -26,9 +26,9 @@ IMAGE  image_Explosion_Overlay    "gfx/Explosion_Overlay.png"    NONE DUPLICATE
 SPRITE sprite_Explosion_Sprites_0 "gfx/Explosion_Sprites_0.png"  16 17 NONE 0 NONE TILE
 SPRITE sprite_Explosion_Sprites_1 "gfx/Explosion_Sprites_1.png"  12 17 NONE 0 NONE TILE
 
-//
+// -----------------------------------------------------------------------------
 // Scene 3 -- Hangar
-//
+// -----------------------------------------------------------------------------
 
 IMAGE  image_Hangar_Background    "gfx/Hangar_Background.png"    NONE DUPLICATE
 IMAGE  image_Hangar_Overlay       "gfx/Hangar_Overlay.png"       NONE DUPLICATE
@@ -41,9 +41,9 @@ SPRITE sprite_Hangar_Sprites_4    "gfx/Hangar_Sprites_4.png"      8 10 NONE 0 NO
 SPRITE sprite_Hangar_Sprites_5    "gfx/Hangar_Sprites_5.png"     12  7 NONE 0 NONE TILE
 SPRITE sprite_Hangar_Sprites_6    "gfx/Hangar_Sprites_6.png"     15  7 NONE 0 NONE TILE
 
-//
+// -----------------------------------------------------------------------------
 // Scene 4 -- Title
-//
+// -----------------------------------------------------------------------------
 
 IMAGE  image_Title_Background     "gfx/Title_Background.png"     NONE DUPLICATE
 IMAGE  image_Title_Overlay        "gfx/Title_Overlay.png"        NONE DUPLICATE
@@ -69,16 +69,16 @@ SPRITE sprite_Title_Sprites_16    "gfx/Title_Sprites_16.png"      2  2 NONE 0 NO
 SPRITE sprite_Title_Sprites_17    "gfx/Title_Sprites_17.png"      8  9 NONE 0 NONE TILE
 SPRITE sprite_Title_Sprites_18    "gfx/Title_Sprites_18.png"      2  3 NONE 0 NONE TILE
 
-//
+// -----------------------------------------------------------------------------
 // Music
-//
+// -----------------------------------------------------------------------------
 
 XGM xgm_01 "music/01_-_The_Wind_Blew_All_Day_Long_(OpeningTheme).vgm"
 
-//
+// -----------------------------------------------------------------------------
 // Sound
-//
+// -----------------------------------------------------------------------------
 
-WAV wav_01 "sound/copyright.wav"    XGM
-WAV wav_02 "sound/sorry.wav"        XGM
-WAV wav_03 "sound/thunderforce.wav" XGM
+WAV wav_Copyright    "sound/Copyright.wav"    XGM
+WAV wav_Sorry        "sound/Sorry.wav"        XGM
+WAV wav_ThunderForce "sound/ThunderForce.wav" XGM

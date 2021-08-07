@@ -1,9 +1,9 @@
 #ifndef _RES_RESOURCES_H_
 #define _RES_RESOURCES_H_
 
-extern const u8 wav_01[57088];
-extern const u8 wav_02[11008];
-extern const u8 wav_03[30464];
+extern const u8 wav_Copyright[57088];
+extern const u8 wav_Sorry[11008];
+extern const u8 wav_ThunderForce[30464];
 extern const u8 xgm_01[17920];
 extern const SpriteDefinition sprite_Planet_Sprites;
 extern const SpriteDefinition sprite_Explosion_Sprites_0;
