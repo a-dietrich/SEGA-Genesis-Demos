@@ -220,32 +220,20 @@ void scene0()
     PAL_fadeToAll(palette_black, 16, FALSE);
 
     // Exit
-    waitMs(500);
+    waitMs(250);
 }
+
+// -----------------------------------------------------------------------------
 
 void scene1()
 {
-#if 0
-    VDP_PRINT_1(1,1, "image_Planet_Background_0 %0X", image_Planet_Background_0.tileset->numTile*32);
-    VDP_PRINT_1(1,2, "image_Planet_Background_1 %0X", image_Planet_Background_1.tileset->numTile*32);
-    VDP_PRINT_1(1,3, "image_Planet_Background_2 %0X", image_Planet_Background_2.tileset->numTile*32);
-    VDP_PRINT_1(1,4, "image_Planet_Overlay      %0X", image_Planet_Overlay.tileset->numTile*32);
+    #if 0
+        debugInfoScene1();
+    #endif
 
-    u16 sum = image_Planet_Background_0.tileset->numTile*32
-            + image_Planet_Background_1.tileset->numTile*32
-            + image_Planet_Background_2.tileset->numTile*32
-            + image_Planet_Overlay.tileset->numTile*32;
-
-    VDP_PRINT_1(1, 6, "BG sum: %0X", sum);
-
-    VDP_PRINT_1(1, 8, "sprite_Planet_Sprites %0X", sprite_Planet_Sprites.maxNumTile*32);
-
-    sum += sprite_Planet_Sprites.maxNumTile*32;
-
-    VDP_PRINT_1(1, 10, "Total sum: %0X", sum);
-
-    while(1);
-#endif
+    // --------------
+    // Initialization
+    // --------------
 
     resetScreen();
     resetSprites();
@@ -261,16 +249,22 @@ void scene1()
     SPR_update();
 
     SYS_doVBlankProcess();
-    VDP_setPaletteColors( 0, image_Planet_Background_0.palette->data, 16);
-    VDP_setPaletteColors(16, image_Planet_Background_1.palette->data, 16);
-    VDP_setPaletteColors(32, image_Planet_Background_2.palette->data, 16);
-    VDP_setPaletteColors(48, sprite_Planet_Sprites.palette->data,     16);
+    PAL_setPalette(PAL0, image_Planet_Background_0.palette->data, DMA);
+    PAL_setPalette(PAL1, image_Planet_Background_1.palette->data, DMA);
+    PAL_setPalette(PAL2, image_Planet_Background_2.palette->data, DMA);
+    PAL_setPalette(PAL3, sprite_Planet_Sprites.palette->data,     DMA);
 
+    // ------------
+    // Play scene 1
+    // ------------
+
+    // Start background music
     XGM_startPlay(xgm_01);
 
+    // Intro sound
     playPCM(WAV_SORRY);
 
-    // Scroll background
+    // Scroll background and sprites
     {
         for (s16 hScroll=0; hScroll<=320; hScroll+=8)
         {
@@ -317,36 +311,26 @@ void scene1()
     }
 
     // Fade to white
-    waitMs(2000);
+    waitMs(3250);
     {
         PAL_fadeToAll(palette_white, 32, FALSE);
     }
 
     // Exit
-    waitMs(500);
+    waitMs(250);
 }
+
+// -----------------------------------------------------------------------------
 
 void scene2()
 {
-#if 0
-    VDP_PRINT_1(1, 1, "image_Explosion_Background %0X", image_Explosion_Background.tileset->numTile*32);
-    VDP_PRINT_1(1, 2, "image_Explosion_Overlay    %0X", image_Explosion_Overlay.tileset->numTile*32);
+    #if 0
+        debugInfoScene2();
+    #endif
 
-    u16 sum = image_Explosion_Background.tileset->numTile*32
-            + image_Explosion_Overlay.tileset->numTile*32;
-
-    VDP_PRINT_1(1, 4, "BG sum: %0X", sum);
-
-    VDP_PRINT_1(1, 6, "sprite_Explosion_Sprites_0 %0X", sprite_Explosion_Sprites_0.maxNumTile*32);
-    VDP_PRINT_1(1, 7, "sprite_Explosion_Sprites_1 %0X", sprite_Explosion_Sprites_1.maxNumTile*32);
-
-    sum += sprite_Explosion_Sprites_0.maxNumTile*32;
-    sum += sprite_Explosion_Sprites_1.maxNumTile*32;
-
-    VDP_PRINT_1(1, 9, "Total sum: %0X", sum);
-
-    while(1);
-#endif
+    // --------------
+    // Initialization
+    // --------------
 
     resetScreen();
     resetSprites();
@@ -372,13 +356,17 @@ void scene2()
 
     SPR_update();
 
+    // ------------
+    // Play scene 2
+    // ------------
+
     // Fade in background and sprites
     fadePalettes(
         image_Explosion_Background.palette->data,
         sprite_Explosion_Sprites_0.palette->data,
         image_Explosion_Overlay.palette->data,
         NULL,
-        48,
+        32,
         FALSE
     );
 
@@ -391,46 +379,26 @@ void scene2()
     }
 
     // Fade to black
-    waitMs(2000);
+    waitMs(4750);
     {
         PAL_fadeToAll(palette_black, 32, FALSE);
     }
 
     // Exit
-    waitMs(500);
+    waitMs(250);
 }
+
+// -----------------------------------------------------------------------------
 
 void scene3()
 {
-#if 0
-    VDP_PRINT_1(1,1, "image_Hangar_Background %0X",image_Hangar_Background.tileset->numTile*32);
-    VDP_PRINT_1(1,2, "image_Hangar_Overlay    %0X",image_Hangar_Overlay.tileset->numTile*32);
+    #if 0
+        debugInfoScene3();
+    #endif
 
-    u16 sum = image_Hangar_Background.tileset->numTile*32
-            + image_Hangar_Overlay.tileset->numTile*32;
-
-    VDP_PRINT_1(1, 4, "BG sum: %0X", sum);
-
-    VDP_PRINT_1(1, 6, "sprite_Hangar_Sprites_0 %0X", 32*sprite_Hangar_Sprites_0.animations[0]->frames[0]->tileset->numTile);
-    VDP_PRINT_1(1, 7, "sprite_Hangar_Sprites_1 %0X", 32*sprite_Hangar_Sprites_1.animations[0]->frames[0]->tileset->numTile);
-    VDP_PRINT_1(1, 8, "sprite_Hangar_Sprites_2 %0X", 32*sprite_Hangar_Sprites_2.animations[0]->frames[0]->tileset->numTile);
-    VDP_PRINT_1(1, 9, "sprite_Hangar_Sprites_3 %0X", 32*sprite_Hangar_Sprites_3.animations[0]->frames[0]->tileset->numTile);
-    VDP_PRINT_1(1,10, "sprite_Hangar_Sprites_4 %0X", 32*sprite_Hangar_Sprites_4.animations[0]->frames[0]->tileset->numTile);
-    VDP_PRINT_1(1,11, "sprite_Hangar_Sprites_5 %0X", 32*sprite_Hangar_Sprites_5.animations[0]->frames[0]->tileset->numTile);
-    VDP_PRINT_1(1,12, "sprite_Hangar_Sprites_6 %0X", 32*sprite_Hangar_Sprites_6.animations[0]->frames[0]->tileset->numTile);
-
-    sum += 32*sprite_Hangar_Sprites_0.animations[0]->frames[0]->tileset->numTile;
-    sum += 32*sprite_Hangar_Sprites_1.animations[0]->frames[0]->tileset->numTile;
-    sum += 32*sprite_Hangar_Sprites_2.animations[0]->frames[0]->tileset->numTile;
-    sum += 32*sprite_Hangar_Sprites_3.animations[0]->frames[0]->tileset->numTile;
-    sum += 32*sprite_Hangar_Sprites_4.animations[0]->frames[0]->tileset->numTile;
-    sum += 32*sprite_Hangar_Sprites_5.animations[0]->frames[0]->tileset->numTile;
-    sum += 32*sprite_Hangar_Sprites_6.animations[0]->frames[0]->tileset->numTile;
-
-    VDP_PRINT_1(1, 14, "Total sum: %0X", sum);
-
-    while(1);
-#endif
+    // --------------
+    // Initialization
+    // --------------
 
     resetScreen();
     resetSprites();
@@ -461,12 +429,17 @@ void scene3()
 
     SPR_update();
 
+    // ------------
+    // Play scene 3
+    // ------------
+
+    // Fade in background and sprites
     fadePalettes(
         image_Hangar_Background.palette->data,
         sprite_Hangar_Sprites_0.palette->data,
         sprite_Hangar_Sprites_2.palette->data,
         sprite_Hangar_Sprites_5.palette->data,
-        48,
+        32,
         FALSE
     );
 
@@ -478,72 +451,23 @@ void scene3()
     }
 
     // Fade to black
-    waitMs(2000);
+    waitMs(5000);
     {
         PAL_fadeToAll(palette_black, 32, FALSE);
     }
 
     // Exit
-    waitMs(500);
+    waitMs(250);
 }
+
+// -----------------------------------------------------------------------------
 
 void scene4()
 {
-#if 0
-    VDP_PRINT_1(1,1, "image_Title_Background   %0X",image_Title_Background.tileset->numTile*32);
-    VDP_PRINT_1(1,2, "image_Title_Overlay      %0X",image_Title_Overlay.tileset->numTile*32);
-    VDP_PRINT_1(1,3, "image_Title_ThunderForce %0X",image_Title_ThunderForce.tileset->numTile*32);
+    #if 0
+        debugInfoScene4();
+    #endif
 
-    u16 sum = image_Title_Background.tileset->numTile*32
-            + image_Title_Overlay.tileset->numTile*32
-            + image_Title_ThunderForce.tileset->numTile*32;
-
-    VDP_PRINT_1(1, 5, "BG sum: %0X", sum);
-
-    VDP_PRINT_1(1, 7, "sprite_Title_Sprites_0  %0X", 32*sprite_Title_Sprites_0.animations[0]->frames[0]->tileset->numTile);
-    VDP_PRINT_1(1, 8, "sprite_Title_Sprites_1  %0X", 32*sprite_Title_Sprites_1.animations[0]->frames[0]->tileset->numTile);
-    VDP_PRINT_1(1, 9, "sprite_Title_Sprites_2  %0X", 32*sprite_Title_Sprites_2.animations[0]->frames[0]->tileset->numTile);
-    VDP_PRINT_1(1,10, "sprite_Title_Sprites_3  %0X", 32*sprite_Title_Sprites_3.animations[0]->frames[0]->tileset->numTile);
-    VDP_PRINT_1(1,11, "sprite_Title_Sprites_4  %0X", 32*sprite_Title_Sprites_4.animations[0]->frames[0]->tileset->numTile);
-    VDP_PRINT_1(1,12, "sprite_Title_Sprites_5  %0X", 32*sprite_Title_Sprites_5.animations[0]->frames[0]->tileset->numTile);
-    VDP_PRINT_1(1,13, "sprite_Title_Sprites_6  %0X", 32*sprite_Title_Sprites_6.animations[0]->frames[0]->tileset->numTile);
-    VDP_PRINT_1(1,14, "sprite_Title_Sprites_7  %0X", 32*sprite_Title_Sprites_7.animations[0]->frames[0]->tileset->numTile);
-    VDP_PRINT_1(1,15, "sprite_Title_Sprites_8  %0X", 32*sprite_Title_Sprites_8.animations[0]->frames[0]->tileset->numTile);
-    VDP_PRINT_1(1,16, "sprite_Title_Sprites_9  %0X", 32*sprite_Title_Sprites_9.animations[0]->frames[0]->tileset->numTile);
-    VDP_PRINT_1(1,17, "sprite_Title_Sprites_10 %0X", 32*sprite_Title_Sprites_10.animations[0]->frames[0]->tileset->numTile);
-    VDP_PRINT_1(1,18, "sprite_Title_Sprites_11 %0X", 32*sprite_Title_Sprites_11.animations[0]->frames[0]->tileset->numTile);
-    VDP_PRINT_1(1,19, "sprite_Title_Sprites_12 %0X", 32*sprite_Title_Sprites_12.animations[0]->frames[0]->tileset->numTile);
-    VDP_PRINT_1(1,20, "sprite_Title_Sprites_13 %0X", 32*sprite_Title_Sprites_13.animations[0]->frames[0]->tileset->numTile);
-    VDP_PRINT_1(1,21, "sprite_Title_Sprites_14 %0X", 32*sprite_Title_Sprites_14.animations[0]->frames[0]->tileset->numTile);
-    VDP_PRINT_1(1,22, "sprite_Title_Sprites_15 %0X", 32*sprite_Title_Sprites_15.animations[0]->frames[0]->tileset->numTile);
-    VDP_PRINT_1(1,23, "sprite_Title_Sprites_16 %0X", 32*sprite_Title_Sprites_16.animations[0]->frames[0]->tileset->numTile);
-    VDP_PRINT_1(1,24, "sprite_Title_Sprites_17 %0X", 32*sprite_Title_Sprites_17.animations[0]->frames[0]->tileset->numTile);
-    VDP_PRINT_1(1,25, "sprite_Title_Sprites_18 %0X", 32*sprite_Title_Sprites_18.animations[0]->frames[0]->tileset->numTile);
-
-    sum += 32*sprite_Title_Sprites_0.animations[0]->frames[0]->tileset->numTile;
-    sum += 32*sprite_Title_Sprites_1.animations[0]->frames[0]->tileset->numTile;
-    sum += 32*sprite_Title_Sprites_2.animations[0]->frames[0]->tileset->numTile;
-    sum += 32*sprite_Title_Sprites_3.animations[0]->frames[0]->tileset->numTile;
-    sum += 32*sprite_Title_Sprites_4.animations[0]->frames[0]->tileset->numTile;
-    sum += 32*sprite_Title_Sprites_5.animations[0]->frames[0]->tileset->numTile;
-    sum += 32*sprite_Title_Sprites_6.animations[0]->frames[0]->tileset->numTile;
-    sum += 32*sprite_Title_Sprites_7.animations[0]->frames[0]->tileset->numTile;
-    sum += 32*sprite_Title_Sprites_8.animations[0]->frames[0]->tileset->numTile;
-    sum += 32*sprite_Title_Sprites_9.animations[0]->frames[0]->tileset->numTile;
-    sum += 32*sprite_Title_Sprites_10.animations[0]->frames[0]->tileset->numTile;
-    sum += 32*sprite_Title_Sprites_11.animations[0]->frames[0]->tileset->numTile;
-    sum += 32*sprite_Title_Sprites_12.animations[0]->frames[0]->tileset->numTile;
-    sum += 32*sprite_Title_Sprites_13.animations[0]->frames[0]->tileset->numTile;
-    sum += 32*sprite_Title_Sprites_14.animations[0]->frames[0]->tileset->numTile;
-    sum += 32*sprite_Title_Sprites_15.animations[0]->frames[0]->tileset->numTile;
-    sum += 32*sprite_Title_Sprites_16.animations[0]->frames[0]->tileset->numTile;
-    sum += 32*sprite_Title_Sprites_17.animations[0]->frames[0]->tileset->numTile;
-    sum += 32*sprite_Title_Sprites_18.animations[0]->frames[0]->tileset->numTile;
-
-    VDP_PRINT_1(1, 27, "Total sum: %0X", sum);
-
-    while(1);
-#endif
     // -------------------------------------------------------------------------
     //  Interrupt handlers
     // -------------------------------------------------------------------------
@@ -588,9 +512,10 @@ void scene4()
                 // Stop horizontal interrupt to free up for main thread
                 VDP_setHInterrupt(0);
             }
+            // Play speech sample
             else if (!vintSoundOn && getTimeAsFix32(1) > vintTimeSound)
             {
-                XGM_startPlayPCM(66, 1, SOUND_PCM_CH2);
+                XGM_startPlayPCM(WAV_THUNDERFORCE, 1, SOUND_PCM_CH2);
                 vintSoundOn = TRUE;
             }
             // Else draw copyright message
@@ -630,6 +555,10 @@ void scene4()
     // -------------------------------------------------------------------------
     //  Main thread
     // -------------------------------------------------------------------------
+
+    // --------------
+    // Initialization
+    // --------------
 
     resetScreen();
     resetSprites();
@@ -678,35 +607,42 @@ void scene4()
 
     SPR_update();
 
+    // ------------
+    // Play scene 4
+    // ------------
+
+    // Fade in background and sprites
     fadePalettes(
         image_Title_Background.palette->data,
         sprite_Title_Sprites_0.palette->data,
         sprite_Title_Sprites_9.palette->data,
         image_Title_ThunderForce.palette->data,
-        48,
+        32,
         FALSE
     );
 
     // Show overlay text
-    waitMs(0250);
+    waitMs(250);
     {
         VDP_waitVSync();
         VDP_setMapEx(BG_A, image_Title_Overlay.tilemap, TILE_ATTR_FULL(PAL3, TRUE, FALSE, FALSE, indexTitleOverlay), 6, 1, 0, 0, 28, 5);
     }
 
-    waitMs(2000);
+    // Clear overlay text
+    waitMs(4750);
     {
         VDP_waitVSync();
         VDP_clearPlane(BG_A, TRUE);
     }
 
-    // Setup interrupt handlers
+    // Start interrupt handlers and scroll title
+    waitMs(250);
     SYS_disableInts();
     {
         vintVScroll   = 0;
         vintTileIndex = indexTitleThunderForce;
-        vintTimeEnd   = getTimeAsFix32(1) + FIX32(12);
-        vintTimeSound = getTimeAsFix32(1) + FIX32(8);
+        vintTimeEnd   = getTimeAsFix32(1) + FIX32(6);
+        vintTimeSound = getTimeAsFix32(1) + FIX32(0.25);
         vintSoundOn   = FALSE;
 
         VDP_setHIntCounter(0);
@@ -720,6 +656,7 @@ void scene4()
     while (getTimeAsFix32(1) < vintTimeEnd)
         SYS_doVBlankProcess();
     
+    // Stop background music
     XGM_stopPlay();
 
     // Fade out
