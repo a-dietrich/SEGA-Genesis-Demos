@@ -26,7 +26,7 @@ Converting the graphics turned out not to be as straightforward as it first look
 <img src="images/Title_Composition.png" alt="Layer Composition">
 </p>
 
-The official Genesis version of Thunder Force II does actually a great job at replicating the original, but I wanted to sees how close we could come to the X68000. The demo title screen uses more colors on screen than the others. To render it, the Genesis makes use of horizontal raster interrupts, which allow for setting a new color of the text gradient in each scan line.
+The official Genesis version of Thunder Force II does actually a great job at replicating the original, but I wanted to sees how close we could come to the X68000. The demo title screen uses more colors on screen than the others. To render it, the code makes use of horizontal raster interrupts, which allow for setting a new color of the text gradient in each scan line.
 
 <p align="center">
 <img src="images/Thunder_Force_II_Genesis.png" alt="Thunder Force II Genesis" width="320">
