@@ -1,6 +1,6 @@
 # SEGA Genesis Demos
 
-SEGA Genesis demos made with SGDK
+SEGA Genesis demos made with [SGDK](https://github.com/Stephane-D/SGDK)
 
 <img src="tf2/images/Scene_1_Genesis.png" width="160">
 
