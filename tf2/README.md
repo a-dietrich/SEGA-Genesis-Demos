@@ -1,4 +1,4 @@
-# Thunder Force II Title Sequence
+# Thunder Force II Intro Sequence
 
 A while ago I learned on Twitter that the Sharp X68000 version of Thunder Force II features an intro (and ending) sequence that is missing in the SEGA Genesis port. So, I gave it a try to port the intro sequence over to the Genesis using [SGDK](https://github.com/Stephane-D/SGDK).
 
@@ -59,7 +59,7 @@ Building has been tested with SGDK 1.65 (July 2021). It is, however, recommend t
 * Composer
   - Tomomi Ōtani
 
-### Thunder Force II SEGA Genesis Title Sequence
+### Thunder Force II SEGA Genesis Intro Sequence
 
 Genesis conversion by Andreas Dietrich
 
