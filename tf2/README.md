@@ -42,6 +42,7 @@ At the moment, the overlay text is only available in Japanese. In case someone w
 Lastly, the speech samples have be recorded from an emulation of the X68000 version. The background music has been taken from the Genesis version ("The Wind Blew All Day Long" — Opening Theme).
 
 ## Building
+
 With SGDK installed, set `$GDK` as environment variable pointing to your SGDK folder. The demo can then be compiled with:
 
 	make -f $GDK/makefile.gen
@@ -49,6 +50,7 @@ With SGDK installed, set `$GDK` as environment variable pointing to your SGDK fo
 Building has been tested with SGDK 1.65 (July 2021). It is, however, recommend to use the recent [SGDK](https://github.com/Stephane-D/SGDK) master from GitHub, as it contains a number of fixes that make the demo run more smoothly. The build included in this repository has been built from the SGDK master.
 
 ## Credits
+
 ### Thunder Force II Sharp X68000 Version
 
 * Programmer
@@ -58,6 +60,8 @@ Building has been tested with SGDK 1.65 (July 2021). It is, however, recommend t
   - Shinya Shirakawa
 * Composer
   - Tomomi Ōtani
+
+Copyright © 1988 Tecnosoft
 
 ### Thunder Force II SEGA Genesis Intro Sequence
 
