@@ -11,6 +11,6 @@ SEGA Genesis demos made with [SGDK](https://github.com/Stephane-D/SGDK)
 
 A Genesis port of the Thunder Force II intro sequence from the X68000 version.
 
-## Streets of Rage ([sor4-slideshow](sor4-slideshow))
+## Streets of Rage 4 Slideshow ([sor4-slideshow](sor4-slideshow))
 
 A small image slideshow created from screenshots of Streets of Rage 4 with music by Yuzo Koshiro and WING.
