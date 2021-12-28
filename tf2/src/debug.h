@@ -5,7 +5,7 @@
 //  Written in 2021 by Andreas Dietrich
 //
 //  Based on the X68000 Thunder Force II version
-//  Copyright(c) 1988 Tecnosoft
+//  Copyright (c) 1988 Tecnosoft
 // *****************************************************************************
 
 #define VDP_PRINT_1(x, y, fmt, arg0) \
