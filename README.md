@@ -2,8 +2,10 @@
 
 SEGA Genesis demos made with [SGDK](https://github.com/Stephane-D/SGDK)
 
+<div>
 <img src="tf2/images/tf2.png" width="160">
 <img src="sor4-slideshow/images/sor4-slideshow.png" width="160">
+</div>
 
 ## Thunder Force II Intro Sequence ([tf2](tf2))
 
