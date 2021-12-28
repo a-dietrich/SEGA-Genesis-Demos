@@ -1,4 +1,4 @@
-# Streets of Rage 4 SEGA Genesis Slideshow
+# Streets of Rage 4 Slideshow
 
 After having played through Streets of Rage 4, I was curious how it would look on a Mega Drive, so I made a very small slideshow with SGDK using a couple of images I found on Google. Turns out even with 16 colors this does not look so bad. With a more sophisticated tiling and 64 colors it could probably look much better.
 
