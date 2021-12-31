@@ -1,14 +1,14 @@
 # Pseudo 3D Plane Scaling Example
 
-This sample demonstrates how to create a pseudo 3D perspective scaling effect as it can be seen in games like Axelay on the SNES. The idea is to approximate perspective foreshortening by gradually changing the vertical scaling factor of a texture line by line.
+This sample demonstrates how to create a pseudo 3D perspective scaling effect as it can, e.g., be seen in games like Axelay on the SNES. The idea is to approximate perspective foreshortening by gradually changing the vertical scaling factor of a texture line by line.
 
 <p align="center">
 <img src="images/scaling.png" width="320">
 </p>
 
-On the Genesis, we can make use of it's capability to trigger a horizontal raster interrupt in each scanline. In the interrupt handler we set the vertical background scoll value in a way so that it selects a specific line from a texture for dislay. In the example the code for the horizontal and vertical interrupt handlers look as follows:
+On the Genesis, we can make use of it's capability to trigger a horizontal raster interrupt in each scanline. In the interrupt handler we set the vertical background scroll value in a way so that it selects a specific line from a texture for dislay. In the example the code for the horizontal and vertical interrupt handlers looks as follows:
 
-```
+```c
 static u8    lineDisplay  = 0;          // line position on display screen
 static fix16 lineGraphics = 0;          // line position in graphics texture
 static fix16 scroll       = 0;          // scrolling offset
