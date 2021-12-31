@@ -1,4 +1,4 @@
-# Pseudo 3D Plane Scaling Example
+# Scaling Example
 
 This sample demonstrates how to create a pseudo 3D perspective scaling effect as it can, e.g., be seen in games like Axelay on the SNES. The idea is to approximate perspective foreshortening by gradually changing the vertical scaling factor of a texture line by line.
 
