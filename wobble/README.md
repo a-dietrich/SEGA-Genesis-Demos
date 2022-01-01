@@ -1,6 +1,6 @@
 # Screen Wobble Sample
 
-An effect that can be frequenly seen in Mega Drive games is vertical screen distortion, particularly in combination with sine waves (e.g., the startup screen of Vectorman). Like other scaling effects, this is typically achieved by making use of an horizontal interrupt handler that modify the veritical scrolling settings each scanline. Because it is not easy to find good sine function parameters, this demo includes a parameter menu for trying out various settings.
+An effect that can be frequently seen in Mega Drive games is vertical screen distortion, particularly in combination with sine waves (e.g., the startup screen of Vectorman). Like other scaling effects, this is typically achieved by making use of an horizontal interrupt handler that modifies the vertical scrolling settings each scanline. Because it is not easy to find good sine function parameters, this demo includes a parameter menu for trying out various settings.
 
 <p align="center">
 <img src="images/wobble.png" width="320">
@@ -24,7 +24,7 @@ void VIntHandler()
 }
 ```
 
-Other interesing parts of the code inlude:
+Other interesting parts of the code include:
 
 * Applying sine wave functions to fill a parameter buffer for the interrupt handlers (main loop).
 * Using sprites to exploit hardware highlight and shadow modes to create a transparent menu backdrop.
