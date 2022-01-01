@@ -39,11 +39,11 @@ void HIntHandler()
 
     // Change vscroll values if inside the logo
     s16 *addr = vScrollBuffer+(y<<3);
-   __asm volatile (
+    __asm volatile (
         "   lea     0xC00000,%1;"
-        "  move.l  (%0)+,(%1);"
-        "  move.l  (%0)+,(%1);"
-        "  move.l  (%0)+,(%1);"
+        "   move.l  (%0)+,(%1);"
+        "   move.l  (%0)+,(%1);"
+        "   move.l  (%0)+,(%1);"
         "   lea     4(%1),%2;"
         "   move.l  #0x401E0010,(%2);" // Reset VSRAM address (two-tile column 7)
         : "=>a" (addr), "=>a" (data), "=>a" (ctrl)
