@@ -60,6 +60,8 @@ With SGDK installed, set `$GDK` as environment variable pointing to your SGDK fo
 
 Building has been tested with SGDK 1.65 (July 2021).
 
+## Credits
+
 ### Scaling Example
 
 Andreas Dietrich
