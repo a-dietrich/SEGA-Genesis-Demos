@@ -7,6 +7,7 @@ SEGA Genesis demos made with [SGDK](https://github.com/Stephane-D/SGDK)
 <img src="sor4-slideshow/images/sor4-slideshow.png" width="160">
 <img src="scaling/images/scaling.png" width="160">
 <img src="sega-logo/images/sega-logo.png" width="160">
+<img src="fading-test/images/fading-test.png" width="160">
 </div>
 
 ## Thunder Force II Intro Sequence ([tf2](tf2))
@@ -24,3 +25,7 @@ A code a example that demonstrates how to create a pseudo 3D perspective project
 ## SEGA Logo Demo ([sega-logo](sega-logo))
 
 A variation of the classic SEGA logo startup sequence featuring a transparent highlight bar.
+
+## Color Fading Test ([fading-test](fading-test))
+
+A color fading test for SGDK.
