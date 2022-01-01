@@ -1,6 +1,6 @@
 # SEGA Logo Demo
 
-Genesis games typically display a variation of the SEGA logo upon startup. Older games showed the SEGA letter with some simple color cycling. Over time newer games came up with more and more sophisticated effects (e.g., Sonic). So, here is my take on the logo. This example demonstrates the classic blue color cycling, but it is augmented with a transparent moving highlight bar through which the underlying color cycling is visible.
+Genesis games typically display a variation of the SEGA logo upon startup. Older games showed the SEGA letters with some simple color cycling. Over time newer games came up with more and more sophisticated effects (e.g., Sonic). Here is my take on the logo animation. This example demonstrates the classic blue color cycling, but it is augmented with a moving transparent highlight bar through which the underlying color cycling is visible.
 
 <p align="center">
 <img src="images/sega-logo.png" width="320">
