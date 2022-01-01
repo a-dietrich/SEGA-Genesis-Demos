@@ -8,6 +8,7 @@ SEGA Genesis demos made with [SGDK](https://github.com/Stephane-D/SGDK)
 <img src="scaling/images/scaling.png" width="160">
 <img src="sega-logo/images/sega-logo.png" width="160">
 <img src="fading-test/images/fading-test.png" width="160">
+<img src="wobble/images/wobble.png" width="160">
 </div>
 
 ## Thunder Force II Intro Sequence ([tf2](tf2))
@@ -20,7 +21,7 @@ A small image slideshow created from screenshots of Streets of Rage 4 with music
 
 ## Scaling Example ([scaling](scaling))
 
-A code a example that demonstrates how to create a pseudo 3D perspective projection of a scrolling plane.
+A code example that demonstrates how to create a pseudo 3D perspective projection of a scrolling plane.
 
 ## SEGA Logo Demo ([sega-logo](sega-logo))
 
@@ -29,3 +30,7 @@ A variation of the classic SEGA logo startup sequence featuring a transparent hi
 ## Color Fading Test ([fading-test](fading-test))
 
 A color fading test for SGDK.
+
+## Screen Wobble Sample ([wobble](wobble))
+
+A sample that shows how to do vertical screen distortions with sine waves.
