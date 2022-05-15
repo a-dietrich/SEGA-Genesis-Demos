@@ -17,7 +17,13 @@
 #ifndef STB_SPRINTF_NOSTD
 #define STB_SPRINTF_NOSTD
 #endif
+#ifndef STB_SPRINTF_NOUNALIGNED
+#define STB_SPRINTF_NOUNALIGNED
+#endif
+
 #include "../thirdparty/stb/stb_sprintf.h"
+
+extern u16 vsprintf(char *buf, const char *fmt, va_list args);
 
 #define CONSOLE_TAB_SIZE           8
 #define CONSOLE_LINE_BUFFER_SIZE 160 // 4 lines
@@ -28,7 +34,9 @@
 //
 // *****************************************************************************
 
-static u16 m_consoleInit = 0;
+static bool m_consoleDoBufferReset = TRUE;
+static bool m_consoleDoSystemReset = FALSE;
+
 static u16 m_consoleX    = 0;
 static u16 m_consoleY    = 0;
 
@@ -37,11 +45,10 @@ static u16 m_consoleTop    =  0;
 static u16 m_consoleWidth  = 40;
 static u16 m_consoleHeight = 28;
 
-static u16* m_consoleFrameBuffer = NULL;
-static char m_consoleLinebuffer[CONSOLE_LINE_BUFFER_SIZE];
+static TransferMethod m_consoleTransferMethod = DMA;
 
-static TransferMethod     m_consoleTransferMethod = DMA;
-static ConsoleSystemReset m_consoleSystemReset    = CSR_ON_WRITE;
+static u16* m_consoleFrameBuffer = NULL;
+static char m_consoleLinebuffer[CONSOLE_LINE_BUFFER_SIZE] = {};
 
 // *****************************************************************************
 //
@@ -98,29 +105,31 @@ static u16 consoleGetBasetile()
 
 static u16* consoleGetFrameBuffer()
 {
-    if (m_consoleSystemReset == CSR_ON_WRITE)
+    if (m_consoleDoSystemReset)
     {
-        if (!m_consoleInit)
-        {
-            SYS_disableInts();
-            YM2612_reset();
-            PSG_init();
-            Z80_init();
-            VDP_init();
+        SYS_disableInts();
+        YM2612_reset();
+        PSG_init();
+        Z80_init();
+        VDP_init();
 
-            m_consoleInit = 1;
-        }
+        m_consoleDoSystemReset = FALSE;
     }
 
-    if (m_consoleFrameBuffer == NULL)
+    if (m_consoleDoBufferReset)
     {
-        const u16 tiles    = m_consoleWidth * m_consoleHeight;
         const u16 basetile = consoleGetBasetile();
+        const u16 tiles    = m_consoleWidth * m_consoleHeight;
+        const u16 bytes    = tiles * 2;
 
-        m_consoleFrameBuffer = (u16*)MEM_alloc(tiles * 2);
+        MEM_free(m_consoleFrameBuffer);
+        m_consoleFrameBuffer = (u16*)MEM_alloc(bytes);
+
         if (m_consoleFrameBuffer)
+        {
             memsetU16(m_consoleFrameBuffer, basetile, tiles);
-
+            m_consoleDoBufferReset = FALSE;
+        }
     }
 
     return m_consoleFrameBuffer;
@@ -235,22 +244,7 @@ static void consolePrint(const char *str)
 //  Public console functions
 // -----------------------------------------------------------------------------
 
-void CON_reset()
-{
-    // Reset with default values
-    CON_resetEx(
-        0,           /* left colum */
-        0,           /* top row */
-        40,          /* width */
-        28,          /* height */
-        DMA,         /* transfer method */
-        CSR_ON_WRITE /* system reset */
-    );
-}
-
-// -----------------------------------------------------------------------------
-
-void CON_resetEx(u16 left, u16 top, u16 width, u16 height, TransferMethod tm, ConsoleSystemReset systemReset)
+void CON_setSize(u16 left, u16 top, u16 width, u16 height)
 {
     if (width && height)
     {
@@ -267,15 +261,24 @@ void CON_resetEx(u16 left, u16 top, u16 width, u16 height, TransferMethod tm, Co
         m_consoleHeight = VDP_getScreenHeight() / 8;
     }
 
-    m_consoleInit = 0;
-    m_consoleX    = 0;
-    m_consoleY    = 0;
+    m_consoleX = 0;
+    m_consoleY = 0;
 
+    m_consoleDoBufferReset = TRUE;
+}
+
+// -----------------------------------------------------------------------------
+
+void CON_setTransferMethod(TransferMethod tm)
+{
     m_consoleTransferMethod = tm;
-    m_consoleSystemReset    = systemReset;
+}
 
-    MEM_free(m_consoleFrameBuffer);
-    m_consoleFrameBuffer = NULL;
+// -----------------------------------------------------------------------------
+
+void CON_systemResetOnNextWrite()
+{
+    m_consoleDoSystemReset = TRUE;
 }
 
 // -----------------------------------------------------------------------------
@@ -288,6 +291,7 @@ int CON_write(const char *fmt, ...)
     va_list args;
     va_start(args, fmt);
     len = stbsp_vsnprintf(buffer, CONSOLE_LINE_BUFFER_SIZE, fmt, args);
+    //len = vsprintf(buffer, fmt, args);
     va_end(args);
 
     consolePrint(buffer);

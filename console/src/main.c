@@ -121,9 +121,9 @@ int main()
     VDP_setTextPalette(PAL1);
     VDP_setTextPlane(WINDOW);
 
-    CON_resetEx((40-16)+1, 1, 14, 27, DMA, CSR_NEVER);
-
     bool windowVisible = FALSE;
+
+    CON_setTransferMethod(DMA_QUEUE);
 
     do
     {
@@ -149,11 +149,12 @@ int main()
                 if (w == 8)
                 {
                     // Print header
+                    CON_setSize((40-16)+1, 1, 14, 27);
                     CON_write(" <START> for\n");
                     CON_write(" assert test\n");
-    
+
                     // Place console area below header
-                    // CON_resetEx((40-16)+1, 4, 14, 24, DMA_QUEUE, CSR_NEVER);
+                    CON_setSize((40-16)+1, 4, 14, 24);
                     windowVisible = TRUE;
                 }
             }
