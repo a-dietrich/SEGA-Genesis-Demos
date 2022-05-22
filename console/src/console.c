@@ -57,36 +57,6 @@ static char m_consoleLinebuffer[CONSOLE_LINE_BUFFER_SIZE] = {};
 // *****************************************************************************
 
 // -----------------------------------------------------------------------------
-//  Public printf functions
-// -----------------------------------------------------------------------------
-
-int CON_sprintf(char* buf, const char *fmt, ...)
-{
-    int len;
-
-    va_list args;
-    va_start(args, fmt);
-    len = stbsp_vsprintf(buf, fmt, args);
-    va_end(args);
-
-    return len;
-}
-
-// -----------------------------------------------------------------------------
-
-int CON_snprintf(char* buf, int count, const char *fmt, ...)
-{
-    int len;
-
-    va_list args;
-    va_start(args, fmt);
-    len = stbsp_vsnprintf(buf, count, fmt, args);
-    va_end(args);
-
-    return len;
-}
-
-// -----------------------------------------------------------------------------
 //  Private console functions
 // -----------------------------------------------------------------------------
 
@@ -137,16 +107,51 @@ static u16* consoleGetFrameBuffer()
 
 // -----------------------------------------------------------------------------
 
+static void consoleClearFrameBuffer()
+{
+    if (m_consoleFrameBuffer)
+    {
+        const u16 basetile = consoleGetBasetile();
+        const u16 tiles    = m_consoleWidth * m_consoleHeight;
+
+        memsetU16(m_consoleFrameBuffer, basetile, tiles);
+    }
+}
+
+// -----------------------------------------------------------------------------
+
 static void consoleScroll()
 {
-    u16* const dst = m_consoleFrameBuffer;
-    u16* const src = dst + m_consoleWidth;
-    
-    const u16 tiles    = m_consoleWidth * (m_consoleHeight-1);
-    const u16 basetile = consoleGetBasetile();
+    if (m_consoleFrameBuffer)
+    {
+        u16* const dst = m_consoleFrameBuffer;
+        u16* const src = dst + m_consoleWidth;
+        
+        const u16 tiles    = m_consoleWidth * (m_consoleHeight-1);
+        const u16 basetile = consoleGetBasetile();
 
-    memcpyU16(dst, src, tiles);
-    memsetU16(dst+tiles, basetile, m_consoleWidth);
+        memcpyU16(dst, src, tiles);
+        memsetU16(dst+tiles, basetile, m_consoleWidth);
+    }
+}
+
+// -----------------------------------------------------------------------------
+
+static void consoleUploadFrameBuffer()
+{
+    if (m_consoleFrameBuffer)
+    {
+        VDP_setTileMapDataRect(
+            VDP_getTextPlane(),
+            m_consoleFrameBuffer,
+            m_consoleLeft,
+            m_consoleTop,
+            m_consoleWidth,
+            m_consoleHeight,
+            m_consoleWidth,
+            m_consoleTransferMethod
+        );
+    }
 }
 
 // -----------------------------------------------------------------------------
@@ -227,17 +232,36 @@ static void consolePrint(const char *str)
             }
         }
     }
+}
 
-    VDP_setTileMapDataRect(
-        VDP_getTextPlane(),
-		buffer,
-		m_consoleLeft,
-		m_consoleTop,
-		m_consoleWidth,
-		m_consoleHeight,
-        m_consoleWidth,
-		m_consoleTransferMethod
-	);
+// -----------------------------------------------------------------------------
+//  Public printf functions
+// -----------------------------------------------------------------------------
+
+int CON_sprintf(char* buf, const char *fmt, ...)
+{
+    int len;
+
+    va_list args;
+    va_start(args, fmt);
+    len = stbsp_vsprintf(buf, fmt, args);
+    va_end(args);
+
+    return len;
+}
+
+// -----------------------------------------------------------------------------
+
+int CON_snprintf(char* buf, int count, const char *fmt, ...)
+{
+    int len;
+
+    va_list args;
+    va_start(args, fmt);
+    len = stbsp_vsnprintf(buf, count, fmt, args);
+    va_end(args);
+
+    return len;
 }
 
 // -----------------------------------------------------------------------------
@@ -276,9 +300,44 @@ void CON_setTransferMethod(TransferMethod tm)
 
 // -----------------------------------------------------------------------------
 
+void CON_reset()
+{
+    CON_setSize(0, 0, 40, 28);
+    CON_setTransferMethod(DMA);
+}
+
+// -----------------------------------------------------------------------------
+
 void CON_systemResetOnNextWrite()
 {
     m_consoleDoSystemReset = TRUE;
+}
+
+// -----------------------------------------------------------------------------
+
+void CON_clear()
+{
+    m_consoleX = m_consoleY = 0;
+
+    consoleClearFrameBuffer();
+    consoleUploadFrameBuffer();
+}
+
+// -----------------------------------------------------------------------------
+
+void CON_setCursorPosition(u16 x, u16 y)
+{
+    m_consoleX = min(x, m_consoleWidth-1);
+    m_consoleY = min(y, m_consoleHeight-1);
+}
+
+// -----------------------------------------------------------------------------
+
+V2u16 CON_getCursorPosition()
+{
+    V2u16 result = { m_consoleX, m_consoleY };
+
+    return result;
 }
 
 // -----------------------------------------------------------------------------
@@ -295,6 +354,7 @@ int CON_write(const char *fmt, ...)
     va_end(args);
 
     consolePrint(buffer);
+    consoleUploadFrameBuffer();
 
     return len;
 }

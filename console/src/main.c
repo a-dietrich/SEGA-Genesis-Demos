@@ -1,8 +1,10 @@
 
 // *****************************************************************************
+//
 //  Console example
 //
 //  Written in 2022 by Andreas Dietrich
+//
 // *****************************************************************************
 
 // -----------------------------------------------------------------------------
@@ -88,41 +90,96 @@ void setupWindow()
 	);
 }
 
+// -----------------------------------------------------------------------------
+
+void waitPressSTART()
+{
+    // Wait until START gets released
+    while (JOY_readJoypad(JOY_1) & BUTTON_START)
+        SYS_doVBlankProcess();
+
+    // Wait until START is pressed
+    while (!(JOY_readJoypad(JOY_1) & BUTTON_START))
+        SYS_doVBlankProcess();
+}
+
 // *****************************************************************************
 //
-//  Main
+//  Demos
 //
 // *****************************************************************************
 
-int main()
+void demoBasics()
 {
-    VDP_setScreenWidth320();
-    VDP_setScreenHeight224();
-    VDP_setPlaneSize(128, 32, TRUE);
+    CON_write("------------\n");
+    CON_write("Console Test\n");
+    CON_write("------------\n");
+    CON_write("\n");
+    CON_write("using stb_sprintf\n");
+    CON_write("(http://github.com/nothings/stb)\n");
+    CON_write(" allowed types: sc uidBboXx p AaGgEef n\n");
+    CON_write(" lengths      : h ll j z t I64 I32 I\n");
+    CON_write("\n");
+    CON_write("supported control characters:\n");
+    CON_write(" \\b : backspace\n");
+    CON_write(" \\n : new line (line feed)\n");
+    CON_write(" \\r : carriage return\n");
+    CON_write(" \\t : horizontal tab\n");
+    CON_write(" \\v : vertical tab\n");
+
+    CON_setCursorPosition(0, 26);
+    CON_write("Press <START> for control character demo");
+
+    waitPressSTART();
+}
+
+// -----------------------------------------------------------------------------
+
+void demoControlCharacters()
+{
+    CON_clear();
+
+    CON_write("\nFirst a carriage return & new line\n");
+    CON_write("then print an integer %d", 101);
+    CON_write("\nstep\vstep\vstep\vstep\vstep\vstep\vstep\n");
+    CON_write("   <- The number five goes here\r 5\n");
+    CON_write("\n0         1         2         3\n");
+    CON_write("0123456789012345678901234567890123456789\n");
+    CON_write("T\tT\tT\tT\tT\n");
+    CON_write("0\b22\b\b1");
+    CON_write("\n%e \b %g \b %g\n" , 1234567.0, 1234567.0, 123456.0);
+
+    CON_setCursorPosition(5, 26);
+    CON_write("Press <START> for window demo");
+
+    waitPressSTART();
+}
+
+// -----------------------------------------------------------------------------
+
+void demoWindow()
+{
+    // Blank screen
     VDP_setPaletteColors(0, palette_black, 64);
 
-    // VDP memory layout
-    VDP_setBGAAddress         ( BGA_ADDR           );
-    VDP_setBGBAddress         ( BGB_ADDR           );
-    VDP_setWindowAddress      ( WINDOW_ADDR        );
-    VDP_setSpriteListAddress  ( SPRITE_LIST_ADDR   );
-    VDP_setHScrollTableAddress( HSCROLL_TABLE_ADDR );
-
+    // Setup text
     VDP_loadFontData(tileset_Font_Namco_Opaque.tiles, 96, CPU);
+    VDP_setTextPalette(PAL1);
+    VDP_setTextPlane(WINDOW);
 
     // Prepare tile maps
     setupBackground();
     setupForeground();
     setupWindow();
 
+    // Trigger fade in
     PAL_fadeIn( 1, 15, image_R_Type_BG.palette->data+1, 16, TRUE);
     PAL_setPaletteColors (16, &palette_Font_Namco_Opaque, CPU);
 
-    VDP_setTextPalette(PAL1);
-    VDP_setTextPlane(WINDOW);
-
+    // Hide window
     bool windowVisible = FALSE;
 
+    // Use DMA_QUEUE to not interfere with othe DMA transfers
     CON_setTransferMethod(DMA_QUEUE);
 
     do
@@ -161,23 +218,51 @@ int main()
 
             // Write scroll values
             if (windowVisible)
+            {
                 CON_write("A:%04hd B:%04hd\n", -xa, -xb);
 
-            // *****************************************************************
-            // Simulated assert
-            // *****************************************************************
+                // *************************************************************
+                // Simulated assert
+                // *************************************************************
 
-            const u16 joyState = JOY_readJoypad(JOY_1);
-            if (joyState & BUTTON_START)
-            {
-                // Simulate wrong x value
-                x = 1025;
+                const u16 joyState = JOY_readJoypad(JOY_1);
+                if (joyState & BUTTON_START)
+                {
+                    // Simulate wrong x value
+                    x = 1025;
+                }
+
+                assert(x < 1024);
+
+                // *************************************************************
             }
-
-            assert(x < 1024);
-
-            // *****************************************************************
         }
     }
     while (TRUE);
+}
+
+// *****************************************************************************
+//
+//  Main
+//
+// *****************************************************************************
+
+int main()
+{
+    // Setup screen
+    VDP_setScreenWidth320();
+    VDP_setScreenHeight224();
+    VDP_setPlaneSize(128, 32, TRUE);
+
+    // VDP memory layout
+    VDP_setBGAAddress         ( BGA_ADDR           );
+    VDP_setBGBAddress         ( BGB_ADDR           );
+    VDP_setWindowAddress      ( WINDOW_ADDR        );
+    VDP_setSpriteListAddress  ( SPRITE_LIST_ADDR   );
+    VDP_setHScrollTableAddress( HSCROLL_TABLE_ADDR );
+
+    // Run demos
+    demoBasics();
+    demoControlCharacters();
+    demoWindow();
 }
