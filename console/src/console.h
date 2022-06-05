@@ -9,6 +9,12 @@
 
 #pragma once
 
+// *****************************************************************************
+//
+//  Includes
+//
+// *****************************************************************************
+
 // SGDK
 #include <genesis.h>
 
@@ -63,12 +69,13 @@ typedef u32 ptrdiff_t;
 int CON_sprintf(char* buf, const char *fmt, ...)  __attribute__ ((format (printf, 2, 3)));
 int CON_snprintf(char* buf, int count, const char *fmt, ...)  __attribute__ ((format (printf, 3, 4)));
 
-// Console functions
+// Console setup
 void CON_setSize(u16 left, u16 top, u16 width, u16 height);
 void CON_setTransferMethod(TransferMethod tm);
 void CON_reset();
 void CON_systemResetOnNextWrite();
 
+// Console write
 void  CON_clear();
 void  CON_setCursorPosition(u16 x, u16 y);
 V2u16 CON_getCursorPosition();

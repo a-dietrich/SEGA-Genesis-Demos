@@ -7,6 +7,12 @@
 //  Copyright (c) 2022 Andreas Dietrich
 // *****************************************************************************
 
+// *****************************************************************************
+//
+//  Includes
+//
+// *****************************************************************************
+
 // Console
 #include "console.h"
 
@@ -23,10 +29,15 @@
 
 #include "../thirdparty/stb/stb_sprintf.h"
 
-extern u16 vsprintf(char *buf, const char *fmt, va_list args);
+// *****************************************************************************
+//
+//  Defines
+//
+// *****************************************************************************
 
-#define CONSOLE_TAB_SIZE           8
-#define CONSOLE_LINE_BUFFER_SIZE 160 // 4 lines
+#define CONSOLE_USE_STB              // disbale use of SGDK sprintf
+#define CONSOLE_TAB_SIZE           8 // horizontal tab width
+#define CONSOLE_LINE_BUFFER_SIZE 160 // buffer keeps 4 lines
 
 // *****************************************************************************
 //
@@ -37,9 +48,8 @@ extern u16 vsprintf(char *buf, const char *fmt, va_list args);
 static bool m_consoleDoBufferReset = TRUE;
 static bool m_consoleDoSystemReset = FALSE;
 
-static u16 m_consoleX    = 0;
-static u16 m_consoleY    = 0;
-
+static u16 m_consoleX      =  0;
+static u16 m_consoleY      =  0;
 static u16 m_consoleLeft   =  0;
 static u16 m_consoleTop    =  0;
 static u16 m_consoleWidth  = 40;
@@ -171,7 +181,7 @@ static void consoleCarriageReturn()
 
 // -----------------------------------------------------------------------------
 
-static void consoleLineFeed()
+static void consoleVerticalTab()
 {
     if (++m_consoleY >= m_consoleHeight)
     {
@@ -185,12 +195,12 @@ static void consoleLineFeed()
 static void consoleNewLine()
 {
     consoleCarriageReturn();
-    consoleLineFeed();
+    consoleVerticalTab();
 }
 
 // -----------------------------------------------------------------------------
 
-static void consoleTab()
+static void consoleHorizontalTab()
 {
     if ((m_consoleX = (m_consoleX/CONSOLE_TAB_SIZE + 1) * CONSOLE_TAB_SIZE) >= m_consoleWidth)
         consoleNewLine();
@@ -220,10 +230,10 @@ static void consolePrint(const char *str)
         switch (c)
         {
             case '\b': consoleBackspace();      break;
-            case '\r': consoleCarriageReturn(); break;
             case '\n': consoleNewLine();        break;
-            case '\t': consoleTab();            break;
-            case '\v': consoleLineFeed();       break;
+            case '\r': consoleCarriageReturn(); break;
+            case '\t': consoleHorizontalTab();  break;
+            case '\v': consoleVerticalTab();    break;
         
             default:
             {
@@ -349,8 +359,14 @@ int CON_write(const char *fmt, ...)
 
     va_list args;
     va_start(args, fmt);
+
+#ifdef CONSOLE_USE_STB
     len = stbsp_vsnprintf(buffer, CONSOLE_LINE_BUFFER_SIZE, fmt, args);
-    //len = vsprintf(buffer, fmt, args);
+#else
+    extern u16 vsprintf(char *buf, const char *fmt, va_list args);
+    len = vsprintf(buffer, fmt, args);
+#endif
+
     va_end(args);
 
     consolePrint(buffer);
