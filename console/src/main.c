@@ -115,6 +115,7 @@ void waitPressSTART()
 
 void demoBasics()
 {
+    CON_write("\n");
     CON_write("------------\n");
     CON_write("Console Test\n");
     CON_write("------------\n");
@@ -131,8 +132,8 @@ void demoBasics()
     CON_write(" \\t : horizontal tab\n");
     CON_write(" \\v : vertical tab\n");
 
-    CON_setCursorPosition(0, 26);
-    CON_write("Press <START> for control character demo");
+    CON_setCursorPosition(5, 26);
+    CON_write("Press <START> for printf demo\n");
 
     waitPressSTART();
 }
@@ -150,11 +151,11 @@ void demoControlCharacters()
     CON_write("\n0         1         2         3\n");
     CON_write("0123456789012345678901234567890123456789\n");
     CON_write("T\tT\tT\tT\tT\n");
-    CON_write("0\b22\b\b1");
+    CON_write("\n0\b22\b\b1");
     CON_write("\n%e \b %g \b %g\n" , 1234567.0, 1234567.0, 123456.0);
 
     CON_setCursorPosition(5, 26);
-    CON_write("Press <START> for window demo");
+    CON_write("Press <START> for window demo\n");
 
     waitPressSTART();
 }

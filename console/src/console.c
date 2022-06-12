@@ -181,6 +181,14 @@ static void consoleCarriageReturn()
 
 // -----------------------------------------------------------------------------
 
+static void consoleHorizontalTab()
+{
+    m_consoleX = min((m_consoleX/CONSOLE_TAB_SIZE + 1) * CONSOLE_TAB_SIZE,
+                      m_consoleWidth-1);
+}
+
+// -----------------------------------------------------------------------------
+
 static void consoleVerticalTab()
 {
     if (++m_consoleY >= m_consoleHeight)
@@ -200,18 +208,16 @@ static void consoleNewLine()
 
 // -----------------------------------------------------------------------------
 
-static void consoleHorizontalTab()
+static void consoleCharacter(char c, u16* buffer, u16 basetile)
 {
-    if ((m_consoleX = (m_consoleX/CONSOLE_TAB_SIZE + 1) * CONSOLE_TAB_SIZE) >= m_consoleWidth)
+    if (m_consoleX >= m_consoleWidth)
         consoleNewLine();
-}
 
-// -----------------------------------------------------------------------------
+    m_consoleX = min(m_consoleX, m_consoleWidth-1);
+    m_consoleY = min(m_consoleY, m_consoleHeight-1);
 
-static void consoleAdvance()
-{
-    if (++m_consoleX >= m_consoleWidth)
-        consoleNewLine();
+    buffer[m_consoleY * m_consoleWidth + m_consoleX] = basetile + c;
+    m_consoleX++;
 }
 
 // -----------------------------------------------------------------------------
@@ -236,10 +242,7 @@ static void consolePrint(const char *str)
             case '\v': consoleVerticalTab();    break;
         
             default:
-            {
-                buffer[m_consoleY * m_consoleWidth + m_consoleX] = basetile + c;
-                consoleAdvance();
-            }
+                consoleCharacter(c, buffer, basetile);
         }
     }
 }
