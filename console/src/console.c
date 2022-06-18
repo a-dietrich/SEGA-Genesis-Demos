@@ -72,6 +72,7 @@ static char m_consoleLinebuffer[CONSOLE_LINE_BUFFER_SIZE] = {};
 
 static u16 consoleGetBasetile()
 {
+    // Build a basetile with current text attributes
     return TILE_ATTR_FULL(
         VDP_getTextPalette(),
         VDP_getTextPriority(),
@@ -85,6 +86,7 @@ static u16 consoleGetBasetile()
 
 static u16* consoleGetFrameBuffer()
 {
+    // Reset SGDK state
     if (m_consoleDoSystemReset)
     {
         SYS_disableInts();
@@ -96,15 +98,18 @@ static u16* consoleGetFrameBuffer()
         m_consoleDoSystemReset = FALSE;
     }
 
+    // Reset console buffer
     if (m_consoleDoBufferReset)
     {
         const u16 basetile = consoleGetBasetile();
         const u16 tiles    = m_consoleWidth * m_consoleHeight;
         const u16 bytes    = tiles * 2;
 
+        // (Re)allocate frame buffer memory
         MEM_free(m_consoleFrameBuffer);
         m_consoleFrameBuffer = (u16*)MEM_alloc(bytes);
 
+        // Clear frame buffer memory
         if (m_consoleFrameBuffer)
         {
             memsetU16(m_consoleFrameBuffer, basetile, tiles);
@@ -119,6 +124,7 @@ static u16* consoleGetFrameBuffer()
 
 static void consoleClearFrameBuffer()
 {
+    // Clear frame buffer memory
     if (m_consoleFrameBuffer)
     {
         const u16 basetile = consoleGetBasetile();
@@ -132,6 +138,7 @@ static void consoleClearFrameBuffer()
 
 static void consoleScroll()
 {
+    // Scroll frame buffer
     if (m_consoleFrameBuffer)
     {
         u16* const dst = m_consoleFrameBuffer;
@@ -140,6 +147,7 @@ static void consoleScroll()
         const u16 tiles    = m_consoleWidth * (m_consoleHeight-1);
         const u16 basetile = consoleGetBasetile();
 
+        // Move upper part of buffer and clear last line
         memcpyU16(dst, src, tiles);
         memsetU16(dst+tiles, basetile, m_consoleWidth);
     }
@@ -149,6 +157,7 @@ static void consoleScroll()
 
 static void consoleUploadFrameBuffer()
 {
+    // Upload the console tile map to VDP RAM
     if (m_consoleFrameBuffer)
     {
         VDP_setTileMapDataRect(
@@ -168,6 +177,7 @@ static void consoleUploadFrameBuffer()
 
 static void consoleBackspace()
 {
+    // Mover cursor position one tile to the left
     if (m_consoleX > 0)
         m_consoleX--;
 }
@@ -176,6 +186,7 @@ static void consoleBackspace()
 
 static void consoleCarriageReturn()
 {
+    // Mover cursor position to start of current line
     m_consoleX = 0;
 }
 
@@ -183,6 +194,8 @@ static void consoleCarriageReturn()
 
 static void consoleHorizontalTab()
 {
+    // Move cursor to next tab positon.
+    // This is the next position divisible by CONSOLE_TAB_SIZE.
     m_consoleX = min((m_consoleX/CONSOLE_TAB_SIZE + 1) * CONSOLE_TAB_SIZE,
                       m_consoleWidth-1);
 }
@@ -191,6 +204,7 @@ static void consoleHorizontalTab()
 
 static void consoleVerticalTab()
 {
+    // Move cursor down and scroll if we are past the bottom line
     if (++m_consoleY >= m_consoleHeight)
     {
         m_consoleY = m_consoleHeight - 1;
@@ -202,6 +216,7 @@ static void consoleVerticalTab()
 
 static void consoleNewLine()
 {
+    // Move cursor to the start of the next line
     consoleCarriageReturn();
     consoleVerticalTab();
 }
@@ -210,13 +225,20 @@ static void consoleNewLine()
 
 static void consoleCharacter(char c, u16* buffer, u16 basetile)
 {
+    // Test if we are past the right border and create a newline if so
     if (m_consoleX >= m_consoleWidth)
         consoleNewLine();
 
+    // Clamp cursor position to window
     m_consoleX = min(m_consoleX, m_consoleWidth-1);
     m_consoleY = min(m_consoleY, m_consoleHeight-1);
 
+    // Insert tile code (basetile index = ASCII code - 32)
     buffer[m_consoleY * m_consoleWidth + m_consoleX] = basetile + (c - 32);
+
+    // Move cursor to the right. Note that we do not automatically create a new
+    // line if we are past the right border. This is because the next character
+    // might be '\n'. This avoids creating an unwanted blank row.
     m_consoleX++;
 }
 
@@ -224,12 +246,15 @@ static void consoleCharacter(char c, u16* buffer, u16 basetile)
 
 static void consolePrint(const char *str)
 {
+    // Get frame buffer pointer
     u16* const buffer = consoleGetFrameBuffer();
     if (!buffer)
         return;
 
+    // Get base tile
     const u16 basetile = consoleGetBasetile();
 
+    // Execute control code or insert new character
     char c;
     while ((c = *str++))
     {
@@ -255,6 +280,7 @@ int CON_sprintf(char* buf, const char *fmt, ...)
 {
     int len;
 
+    // Collect arguments and call stb function
     va_list args;
     va_start(args, fmt);
     len = stbsp_vsprintf(buf, fmt, args);
@@ -269,6 +295,7 @@ int CON_snprintf(char* buf, int count, const char *fmt, ...)
 {
     int len;
 
+    // Collect arguments and call stb function
     va_list args;
     va_start(args, fmt);
     len = stbsp_vsnprintf(buf, count, fmt, args);
@@ -283,6 +310,7 @@ int CON_snprintf(char* buf, int count, const char *fmt, ...)
 
 void CON_setSize(u16 left, u16 top, u16 width, u16 height)
 {
+    // Set console window size (use system defaults if width/height is 0)
     if (width && height)
     {
         m_consoleLeft   = left;
@@ -298,8 +326,8 @@ void CON_setSize(u16 left, u16 top, u16 width, u16 height)
         m_consoleHeight = VDP_getScreenHeight() / 8;
     }
 
-    m_consoleX = 0;
-    m_consoleY = 0;
+    // Reset cursor position
+    m_consoleX = m_consoleY = 0;
 
     m_consoleDoBufferReset = TRUE;
 }
@@ -308,6 +336,7 @@ void CON_setSize(u16 left, u16 top, u16 width, u16 height)
 
 void CON_setTransferMethod(TransferMethod tm)
 {
+    // SGDK transfer method used when uploading the buffer tile map
     m_consoleTransferMethod = tm;
 }
 
@@ -315,6 +344,7 @@ void CON_setTransferMethod(TransferMethod tm)
 
 void CON_reset()
 {
+    // Reset window size and transfer method to defaults
     CON_setSize(0, 0, 40, 28);
     CON_setTransferMethod(DMA);
 }
@@ -323,6 +353,7 @@ void CON_reset()
 
 void CON_systemResetOnNextWrite()
 {
+    // Reset Genesis to SGDK default state on next write
     m_consoleDoSystemReset = TRUE;
 }
 
@@ -330,8 +361,10 @@ void CON_systemResetOnNextWrite()
 
 void CON_clear()
 {
+    // Reset cursor position
     m_consoleX = m_consoleY = 0;
 
+    // Clear and upload tile map
     consoleClearFrameBuffer();
     consoleUploadFrameBuffer();
 }
@@ -340,6 +373,7 @@ void CON_clear()
 
 void CON_setCursorPosition(u16 x, u16 y)
 {
+    // Set new cursor position and clamp to window
     m_consoleX = min(x, m_consoleWidth-1);
     m_consoleY = min(y, m_consoleHeight-1);
 }
@@ -348,6 +382,7 @@ void CON_setCursorPosition(u16 x, u16 y)
 
 V2u16 CON_getCursorPosition()
 {
+    // Create vector containing cursor position
     V2u16 result = { m_consoleX, m_consoleY };
 
     return result;
@@ -360,9 +395,11 @@ int CON_write(const char *fmt, ...)
     int len;
     char *buffer = m_consoleLinebuffer;
 
+    // Collect arguments
     va_list args;
     va_start(args, fmt);
 
+    // Call printf()
 #ifdef CONSOLE_USE_STB
     len = stbsp_vsnprintf(buffer, CONSOLE_LINE_BUFFER_SIZE, fmt, args);
 #else
@@ -372,6 +409,7 @@ int CON_write(const char *fmt, ...)
 
     va_end(args);
 
+    // Process characters and upload tile map
     consolePrint(buffer);
     consoleUploadFrameBuffer();
 
