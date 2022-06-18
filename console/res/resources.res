@@ -1,6 +1,6 @@
 
 IMAGE   image_R_Type_BG    "R-Type_BG.png" NONE NONE
-IMAGE   image_R_Type_FG    "R-Type_FG_3.png" NONE ALL
+IMAGE   image_R_Type_FG    "R-Type_FG_4.png" NONE ALL
 
 TILESET tileset_Font_Namco_Opaque "Font_Namco_Opaque.png"
 
