@@ -136,7 +136,7 @@ static void consoleScroll()
     {
         u16* const dst = m_consoleFrameBuffer;
         u16* const src = dst + m_consoleWidth;
-        
+
         const u16 tiles    = m_consoleWidth * (m_consoleHeight-1);
         const u16 basetile = consoleGetBasetile();
 
@@ -177,7 +177,7 @@ static void consoleBackspace()
 static void consoleCarriageReturn()
 {
     m_consoleX = 0;
-}   
+}
 
 // -----------------------------------------------------------------------------
 
@@ -216,7 +216,7 @@ static void consoleCharacter(char c, u16* buffer, u16 basetile)
     m_consoleX = min(m_consoleX, m_consoleWidth-1);
     m_consoleY = min(m_consoleY, m_consoleHeight-1);
 
-    buffer[m_consoleY * m_consoleWidth + m_consoleX] = basetile + c;
+    buffer[m_consoleY * m_consoleWidth + m_consoleX] = basetile + (c - 32);
     m_consoleX++;
 }
 
@@ -228,7 +228,7 @@ static void consolePrint(const char *str)
     if (!buffer)
         return;
 
-    const u16 basetile = consoleGetBasetile() - 32;
+    const u16 basetile = consoleGetBasetile();
 
     char c;
     while ((c = *str++))
@@ -240,7 +240,7 @@ static void consolePrint(const char *str)
             case '\r': consoleCarriageReturn(); break;
             case '\t': consoleHorizontalTab();  break;
             case '\v': consoleVerticalTab();    break;
-        
+
             default:
                 consoleCharacter(c, buffer, basetile);
         }
