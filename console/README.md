@@ -11,7 +11,7 @@ This sample demonstrates how to create a TTY style text console on the Genesis t
 </p>
 
 Characters are written as a stream, where lines are automatically wrapped if the horizontal border of
-the screen is reached. When at the bottom of the screen window, the console content is moved up by one text line and a blank row is inserted. Per default, the console occupies a standad screen of 40x28 tiles. All text attributes, such as font, palette, plane etc., are taken from SGDK text settings. Screen updates are done using DMA transfer mode (which can be changed with `CON_setTransferMethod()`).
+the screen is reached. When at the bottom of the screen window, the console content is moved up by one text line and a blank row is inserted. Per default, the console window occupies a standad screen of 40x28 tiles. All text attributes, such as font, palette, plane etc., are taken from SGDK text settings. Screen updates are done using DMA transfer mode (which can be changed with `CON_setTransferMethod()`).
 
 One of the use cases are assert messages. To this end, the Genesis state can
 be automatically reset before text is displayed.
