@@ -5,6 +5,7 @@ This sample demonstrates how to create a TTY style text console on the Genesis t
 <p align="center">
 <img src="images/console_overview.png" width="320">
 <img src="images/console_printf.png" width="320">
+<br>
 <img src="images/console_window.png" width="320">
 <img src="images/console_assert.png" width="320">
 </p>
