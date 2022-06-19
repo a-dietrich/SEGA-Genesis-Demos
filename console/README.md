@@ -24,7 +24,7 @@ For easier access all console functions have been collected in a separate module
 int CON_write(const char *fmt, ...)  __attribute__ ((format (printf, 1, 2)));
 ```
 
-* **fmt** <br> C-string that contains the text to be written. It can optionally contain embedded format specifiers that are replaced by the values specified in subsequent additional arguments and formatted as requested. (See [Printf format string](https://en.wikipedia.org/wiki/Printf_format_string).)
+* **fmt** <br> C-string that contains the text to be written. It can optionally contain embedded format specifiers that are replaced by the values specified in subsequent additional arguments and formatted as requested. (See [printf format string](https://en.wikipedia.org/wiki/Printf_format_string).)
 
 * ***... (additional arguments)*** <br> The function may expect a sequence of additional arguments, each containing a value to be used to replace a format specifier in the format string.
 
