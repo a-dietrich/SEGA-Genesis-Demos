@@ -3,6 +3,7 @@
 SEGA Genesis demos made with [SGDK](https://github.com/Stephane-D/SGDK)
 
 <div>
+<img src="console/images/console_window.png" width="160">
 <img src="fading-test/images/fading-test.png" width="160">
 <img src="scaling/images/scaling.png" width="160">
 <img src="sega-logo/images/sega-logo.png" width="160">
@@ -10,6 +11,10 @@ SEGA Genesis demos made with [SGDK](https://github.com/Stephane-D/SGDK)
 <img src="tf2/images/tf2.png" width="160">
 <img src="wobble/images/wobble.png" width="160">
 </div>
+
+## Text Console Demo ([console](console))
+
+A simple TTY style text console.
 
 ## Color Fading Test ([fading-test](fading-test))
 
