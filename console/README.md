@@ -15,7 +15,7 @@ the screen is reached. When at the bottom of the screen window, the console cont
 
 One of the use cases are assert messages. To this end, the Genesis state can
 be automatically reset before text is displayed.
- 
+
 ## Console Usage
 
 For easier access all console functions have been collected in a separate module (`console.h` and `console.c`). A text string can be written to the console by simply calling `CON_write()`, which works just like a standard printf() function. For string formatting this makes use of [stb_sprintf](http://github.com/nothings/stb).
@@ -39,10 +39,10 @@ This function also evaluates and executes escape control sequences. The followin
 | \\n         | new line (line feed) |
 | \\r         | carriage return      |
 | \\t         | horizontal tab       |
-| \\v         | vertical tab 
- 
+| \\v         | vertical tab
 
-More details can be found in the [Doxygen documentation](doc/html/index.html).
+
+More details can be found in the [Doxygen documentation](doc/html).
 
 
 ## Building
