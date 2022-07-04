@@ -10,5 +10,7 @@ var searchData=
   ['con_5fsprintf_7',['CON_sprintf',['../console_8h.html#a415f0b50df56b3b3722b2bcaec015d24',1,'console.h']]],
   ['con_5fsystemresetonnextwrite_8',['CON_systemResetOnNextWrite',['../console_8h.html#a5c1d65e7dc89d154a78df417452de457',1,'console.h']]],
   ['con_5fwrite_9',['CON_write',['../console_8h.html#a5fdc0e4bbbacc69b8f7caa76c59348a5',1,'console.h']]],
-  ['console_2eh_10',['console.h',['../console_8h.html',1,'']]]
+  ['console_20library_10',['Console Library',['../index.html',1,'']]],
+  ['console_2eh_11',['console.h',['../console_8h.html',1,'']]],
+  ['consolelib_2emd_12',['ConsoleLib.md',['../_console_lib_8md.html',1,'']]]
 ];

@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.3"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Console: Main Page</title>
+<title>Console library: Console Library</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -21,8 +21,9 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Console
+   <div id="projectname">Console library
    </div>
+   <div id="projectbrief">Provides functions for creating a TTY style text console on the Genesis that can be used for debug output on real hardware.</div>
   </td>
  </tr>
  </tbody>
@@ -61,10 +62,42 @@ $(function() {
 </iframe>
 </div>
 
-<div class="header">
-  <div class="headertitle"><div class="title">Console Documentation</div></div>
+<div><div class="header">
+  <div class="headertitle"><div class="title">Console Library </div></div>
 </div><!--header-->
 <div class="contents">
+<div class="textblock"><p ><a class="anchor" id="md_ConsoleLib"></a> The console library provides functions for creating a TTY style text console on the Genesis that can be used for debug output on real hardware.</p>
+<p >Characters are written as a stream, where lines are automatically wrapped if the horizontal border of the screen is reached. When at the bottom of the screen window, the console content is moved up by one text line and a blank row is inserted. Per default, the console window occupies a standad screen of 40x28 tiles. All text attributes, such as font, palette, plane etc., are taken from SGDK text settings. Screen updates are done using DMA transfer mode (which can be changed with <code><a class="el" href="console_8h.html#ae365fa43dd65b0234d6650c0d24610c1" title="Set the transfer method used to upload the console tile buffer to VDP RAM.">CON_setTransferMethod()</a></code>).</p>
+<p >One of the use cases are assert messages. To this end, the Genesis state can be automatically reset before text is displayed.</p>
+<h1><a class="anchor" id="autotoc_md1"></a>
+Usage</h1>
+<p >All console functions have been collected in a separate module (<code><a class="el" href="console_8h.html" title="Console – Provides a simple TTY style console.">console.h</a></code> and <code>console.c</code>). A text string can be written to the console by simply calling <code><a class="el" href="console_8h.html#a5fdc0e4bbbacc69b8f7caa76c59348a5" title="Write a C-string to the console window.">CON_write()</a></code>, which works just like a standard printf() function. For string formatting this makes use of <a href="http://github.com/nothings/stb">stb_sprintf</a>.</p>
+<div class="fragment"><div class="line"><span class="keywordtype">int</span> <a class="code hl_function" href="console_8h.html#a5fdc0e4bbbacc69b8f7caa76c59348a5">CON_write</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *fmt, ...)  __attribute__ ((format (printf, 1, 2)));</div>
+<div class="ttc" id="aconsole_8h_html_a5fdc0e4bbbacc69b8f7caa76c59348a5"><div class="ttname"><a href="console_8h.html#a5fdc0e4bbbacc69b8f7caa76c59348a5">CON_write</a></div><div class="ttdeci">int CON_write(const char *fmt,...) __attribute__((format(printf</div><div class="ttdoc">Write a C-string to the console window.</div></div>
+</div><!-- fragment --><ul>
+<li><b>fmt</b> <br  />
+ C-string that contains the text to be written. It can optionally contain embedded format specifiers that are replaced by the values specified in subsequent additional arguments and formatted as requested. (See <a href="https://en.wikipedia.org/wiki/Printf_format_string">printf format string</a>.)</li>
+<li><em><b>... (additional arguments)</b></em> <br  />
+ The function may expect a sequence of additional arguments, each containing a value to be used to replace a format specifier in the format string.</li>
+<li><em><b>returns</b></em> <br  />
+ The total number of characters written is returned. This count does no include the additional null-character automatically appended at the end of the string.</li>
+</ul>
+<p >This function also evaluates and executes escape control sequences. The following table lists the control characters that are supported:</p>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">Escape code   </th><th class="markdownTableHeadNone">Function    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">\b   </td><td class="markdownTableBodyNone">backspace    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">\n   </td><td class="markdownTableBodyNone">new line (line feed)    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">\r   </td><td class="markdownTableBodyNone">carriage return    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">\t   </td><td class="markdownTableBodyNone">horizontal tab    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">\v   </td><td class="markdownTableBodyNone">vertical tab   </td></tr>
+</table>
+</div></div><!-- PageDoc -->
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

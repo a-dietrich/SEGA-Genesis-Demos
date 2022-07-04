@@ -4,7 +4,8 @@ var indexSectionsWithContent =
   1: "c",
   2: "c",
   3: "ps",
-  4: "aesx"
+  4: "aesx",
+  5: "c"
 };
 
 var indexSectionNames =
@@ -13,7 +14,8 @@ var indexSectionNames =
   1: "files",
   2: "functions",
   3: "typedefs",
-  4: "defines"
+  4: "defines",
+  5: "pages"
 };
 
 var indexSectionLabels =
@@ -22,6 +24,7 @@ var indexSectionLabels =
   1: "Files",
   2: "Functions",
   3: "Typedefs",
-  4: "Macros"
+  4: "Macros",
+  5: "Pages"
 };
 
