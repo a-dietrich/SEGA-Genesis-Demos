@@ -1,0 +1,4 @@
+**/out/**
+!**/out/rom.bin
+**/.vscode
+**/.DS_Store
