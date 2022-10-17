@@ -1,5 +1,8 @@
 # Text Console Demo
 
+>__NOTE__ <br>
+<b>This is an earlier version made for SGDK 1.70. An updated version has been integrated into the [SGDK](https://github.com/Stephane-D/SGDK) master.</b>
+
 This sample demonstrates how to create a TTY style text console on the Genesis that can be used for debug output on real hardware.
 
 <p align="center">
